@@ -26,24 +26,23 @@ package com.joffrey_bion.utils.stats;
  */
 public class FlowStats implements Cloneable {
 
+    /** The number of values in this series. */
+    private int nbValues;
+    
+    /** The sum of the weights of the values in this series. */
     private double totalWeight;
-    private double sum; // the sum of the added values
-    private double squaresSum; // the sum of the squares of the added values
+    
+    /** The weighted sum of the added values. */
+    private double weightedSum;
+    
+    /** The weighted sum of the squares of the added values. */
+    private double weightedSquaresSum; 
 
     /**
      * Creates a new {@code FlowStats} object.
      */
     public FlowStats() {
         clear();
-    }
-
-    /**
-     * Resets this {@code FlowStats}, as if all values were removed from the series.
-     */
-    public void clear() {
-        totalWeight = 0;
-        sum = 0;
-        squaresSum = 0;
     }
 
     /**
@@ -61,73 +60,82 @@ public class FlowStats implements Cloneable {
     }
 
     /**
-     * Adds a value to this series.
-     * <p>
-     * The value is actually not stored but used in a pre-computing of the stats
-     * provided through other methods of this class. However, conceptually, it is
-     * added to the series on which this class computes statisctics values.
-     * </p>
+     * Return the number of values that were put in this series.
+     */
+    public int getNbValues() {
+        return nbValues;
+    }
+
+    /**
+     * Return the total weight of the values that were put in this series.
+     */
+    public double getTotalWeight() {
+        return totalWeight;
+    }
+
+    /**
+     * Resets this {@code FlowStats}, as if all values were removed from the series.
+     */
+    public void clear() {
+        nbValues = 0;
+        totalWeight = 0;
+        weightedSum = 0;
+        weightedSquaresSum = 0;
+    }
+
+    /**
+     * Adds a value to this series, with a weight of 1.
      * 
      * @param value
      *            The value to be added.
-     * @see #remove(double)
+     * @see #add(double, double)
      */
     public void add(double value) {
-        totalWeight++;
-        sum += value;
-        squaresSum += value * value;
+        add(value, 1);
     }
 
     /**
-     * Removes a value from this series.
-     * <p>
-     * The value is actually not removed since it was never added, but it is
-     * conceptually what is done. It is the exact opposite of {@link #add(double)}.
-     * </p>
+     * Removes a value from this series, that was previously added via
+     * {@link #add(double)} (with a weight of 1).
      * 
      * @param value
      *            The value to be removed.
-     * @see #add(double)
+     * @see #remove(double, double)
      */
     public void remove(double value) {
-        totalWeight--;
-        sum -= value;
-        squaresSum -= value * value;
+        remove(value, 1);
     }
 
     /**
      * Adds a value to this series.
-     * <p>
-     * The value is actually not stored but used in a pre-computing of the stats
-     * provided through other methods of this class. However, conceptually, it is
-     * added to the series on which this class computes statisctics values.
-     * </p>
      * 
      * @param value
      *            The value to be added.
-     * @see #remove(double)
+     * @param weight
+     *            The weight to give to this value.
+     * @see #add(double)
      */
     public void add(double value, double weight) {
+        nbValues++;
         totalWeight += weight;
-        sum += value;
-        squaresSum += value * value;
+        weightedSum += value * weight;
+        weightedSquaresSum += value * value * weight;
     }
 
     /**
      * Removes a value from this series.
-     * <p>
-     * The value is actually not removed since it was never added, but it is
-     * conceptually what is done. It is the exact opposite of {@link #add(double)}.
-     * </p>
      * 
      * @param value
      *            The value to be removed.
-     * @see #add(double)
+     * @param weight
+     *            The weight that was given to the specified value when added.
+     * @see #remove(double)
      */
     public void remove(double value, double weight) {
+        nbValues--;
         totalWeight -= weight;
-        sum -= value;
-        squaresSum -= value * value;
+        weightedSum -= value * weight;
+        weightedSquaresSum -= value * value * weight;
     }
 
     /**
@@ -137,7 +145,7 @@ public class FlowStats implements Cloneable {
         if (totalWeight == 0) {
             return 0;
         }
-        return sum / totalWeight;
+        return weightedSum / totalWeight;
     }
 
     /**
@@ -147,8 +155,8 @@ public class FlowStats implements Cloneable {
         if (totalWeight == 0) {
             return 0;
         }
-        double avg = mean();
-        return squaresSum / totalWeight - avg * avg;
+        double mean = mean();
+        return weightedSquaresSum / totalWeight - mean * mean;
     }
 
     /**

@@ -26,7 +26,7 @@ package com.joffrey_bion.utils.stats;
  */
 public class FlowStats implements Cloneable {
 
-    private int nbElements;
+    private double totalWeight;
     private double sum; // the sum of the added values
     private double squaresSum; // the sum of the squares of the added values
 
@@ -41,7 +41,7 @@ public class FlowStats implements Cloneable {
      * Resets this {@code FlowStats}, as if all values were removed from the series.
      */
     public void clear() {
-        nbElements = 0;
+        totalWeight = 0;
         sum = 0;
         squaresSum = 0;
     }
@@ -73,7 +73,7 @@ public class FlowStats implements Cloneable {
      * @see #remove(double)
      */
     public void add(double value) {
-        nbElements++;
+        totalWeight++;
         sum += value;
         squaresSum += value * value;
     }
@@ -90,7 +90,42 @@ public class FlowStats implements Cloneable {
      * @see #add(double)
      */
     public void remove(double value) {
-        nbElements--;
+        totalWeight--;
+        sum -= value;
+        squaresSum -= value * value;
+    }
+
+    /**
+     * Adds a value to this series.
+     * <p>
+     * The value is actually not stored but used in a pre-computing of the stats
+     * provided through other methods of this class. However, conceptually, it is
+     * added to the series on which this class computes statisctics values.
+     * </p>
+     * 
+     * @param value
+     *            The value to be added.
+     * @see #remove(double)
+     */
+    public void add(double value, double weight) {
+        totalWeight += weight;
+        sum += value;
+        squaresSum += value * value;
+    }
+
+    /**
+     * Removes a value from this series.
+     * <p>
+     * The value is actually not removed since it was never added, but it is
+     * conceptually what is done. It is the exact opposite of {@link #add(double)}.
+     * </p>
+     * 
+     * @param value
+     *            The value to be removed.
+     * @see #add(double)
+     */
+    public void remove(double value, double weight) {
+        totalWeight -= weight;
         sum -= value;
         squaresSum -= value * value;
     }
@@ -99,21 +134,21 @@ public class FlowStats implements Cloneable {
      * Returns the mean of this series of values.
      */
     public double mean() {
-        if (nbElements == 0) {
+        if (totalWeight == 0) {
             return 0;
         }
-        return sum / nbElements;
+        return sum / totalWeight;
     }
 
     /**
      * Returns the variance of this series of values.
      */
     public double variance() {
-        if (nbElements == 0) {
+        if (totalWeight == 0) {
             return 0;
         }
         double avg = mean();
-        return squaresSum / nbElements - avg * avg;
+        return squaresSum / totalWeight - avg * avg;
     }
 
     /**

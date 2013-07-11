@@ -28,15 +28,15 @@ public class FlowStats implements Cloneable {
 
     /** The number of values in this series. */
     private int nbValues;
-    
+
     /** The sum of the weights of the values in this series. */
     private double totalWeight;
-    
+
     /** The weighted sum of the added values. */
     private double weightedSum;
-    
+
     /** The weighted sum of the squares of the added values. */
-    private double weightedSquaresSum; 
+    private double weightedSquaresSum;
 
     /**
      * Creates a new {@code FlowStats} object.
@@ -165,5 +165,19 @@ public class FlowStats implements Cloneable {
     public double standardDeviation() {
         double var = variance();
         return Math.sqrt(var);
+    }
+
+    /**
+     * Returns the coefficient of variation of this series of values.
+     */
+    public double coeffOfVariation() {
+        double mean = mean();
+        if (mean == 0) {
+            if (totalWeight == 0) {
+                return 0;
+            }
+            return Double.POSITIVE_INFINITY;
+        }
+        return standardDeviation() / mean;
     }
 }

@@ -1,8 +1,12 @@
 package com.joffrey_bion.utils.xml_helper;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -14,12 +18,29 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class XmlHelper {
 
-    public static Element getDirectChild(Element parent, String name) {
+    public static Document createEmptyDomDocument() throws ParserConfigurationException {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        return documentBuilder.newDocument();
+    }
+
+    public static Document getDomDocumentFromFile(String xmlFilePath)
+            throws ParserConfigurationException, SAXException, IOException, FileNotFoundException {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        // use the factory to take an instance of the document builder
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        // parse using the builder to get the DOM mapping of the
+        // XML file
+        return db.parse(XmlHelper.fixURI(xmlFilePath));
+    }
+
+    public static Element getDirectChild(Element parent, String tag) {
         for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {
-            if (child instanceof Element && name.equals(child.getNodeName()))
+            if (child instanceof Element && tag.equals(child.getNodeName()))
                 return (Element) child;
         }
         return null;
@@ -44,6 +65,43 @@ public class XmlHelper {
         elem.appendChild(doc.createTextNode(text));
         root.appendChild(elem);
         return elem;
+    }
+
+    /**
+     * Returns the content of the first descendant node matching the specified tag.
+     * <p>
+     * Example:
+     * 
+     * <pre>
+     * {@code <root>
+     *     <name>
+     *         <first>John</first>
+     *         <last>Smith</last>
+     *     </name>
+     *     <last>BlahBlah</last>
+     * </root>
+     * 
+     * getField(root, "last"); // returns "Smith"}
+     * </pre>
+     * 
+     * </p>
+     * 
+     * @param root
+     *            The starting point in the XML tree to look for descendants.
+     * @param tag
+     *            The tag of the desired descendant.
+     * @return The content of the first descendant matching the tag.
+     */
+    public static String getField(Element root, String tag) {
+        NodeList children = root.getElementsByTagName(tag);
+        if (children.getLength() == 0) {
+            return null;
+        }
+        Node fieldNode = children.item(0).getFirstChild();
+        if (fieldNode == null) {
+            return null;
+        }
+        return fieldNode.getNodeValue();
     }
 
     /**
@@ -73,38 +131,51 @@ public class XmlHelper {
     }
 
     /**
-     * Returns the content of the first descendant node matching the specified tag.
-     * <p>
-     * Example:
+     * Fix problems in the URIs (spaces for instance).
      * 
-     * <pre>
-     * {@code <root>
-     *     <name>
-     *         <first>John</first>
-     *         <last>Smith</last>
-     *     </name>
-     * </root>
-     * 
-     * getField(root, "last"); // returns "Smith"}
-     * </pre>
-     * 
-     * </p>
-     * 
-     * @param root
-     *            The starting point in the XML tree to look for descendants.
-     * @param tag
-     *            The tag of the desired descendant.
-     * @return The content of the first descendant matching the tag.
+     * @param uri
+     *            The original URI.
+     * @return The corrected URI.
      */
-    public static String getField(Element root, String tag) {
-        NodeList children = root.getElementsByTagName(tag);
-        if (children.getLength() == 0) {
-            return null;
+    public static String fixURI(String uri) {
+        // handle platform dependent strings
+        String path = uri.replace(java.io.File.separatorChar, '/');
+        // Windows fix
+        if (path.length() >= 2) {
+            char ch1 = path.charAt(1);
+            // change "C:blah" to "/C:blah"
+            if (ch1 == ':') {
+                char ch0 = Character.toUpperCase(path.charAt(0));
+                if (ch0 >= 'A' && ch0 <= 'Z') {
+                    path = "/" + path;
+                }
+            }
+            // change "//blah" to "file://blah"
+            else if (ch1 == '/' && path.charAt(0) == '/') {
+                path = "file:" + path;
+            }
         }
-        Node fieldNode = children.item(0).getFirstChild();
-        if (fieldNode == null) {
-            return null;
+        // replace spaces in file names with %20.
+        // Original comment from JDK5: the following algorithm might not be
+        // very performant, but people who want to use invalid URI's have to
+        // pay the price.
+        int pos = path.indexOf(' ');
+        if (pos >= 0) {
+            StringBuilder sb = new StringBuilder(path.length());
+            // put characters before ' ' into the string builder
+            for (int i = 0; i < pos; i++)
+                sb.append(path.charAt(i));
+            // and %20 for the space
+            sb.append("%20");
+            // for the remaining part, also convert ' ' to "%20".
+            for (int i = pos + 1; i < path.length(); i++) {
+                if (path.charAt(i) == ' ')
+                    sb.append("%20");
+                else
+                    sb.append(path.charAt(i));
+            }
+            return sb.toString();
         }
-        return fieldNode.getNodeValue();
+        return path;
     }
 }

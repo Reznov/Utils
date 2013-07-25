@@ -3,6 +3,7 @@ package com.joffrey_bion.utils.xml_helper;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,12 +39,40 @@ public class XmlHelper {
         return db.parse(XmlHelper.fixURI(xmlFilePath));
     }
 
-    public static Element getDirectChild(Element parent, String tag) {
+    public static Element getFirstDirectChild(Element parent, String tag) {
         for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {
-            if (child instanceof Element && tag.equals(child.getNodeName()))
+            if (child instanceof Element && tag.equals(child.getNodeName())) {
                 return (Element) child;
+            }
         }
         return null;
+    }
+
+    public static LinkedList<Element> getDirectChildren(Element parent, String tag) {
+        LinkedList<Element> list = new LinkedList<>();
+        for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {
+            if (child instanceof Element && tag.equals(child.getNodeName())) {
+                list.add((Element) child);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Creates an element representing {@code <tag>text</tag>}.
+     * 
+     * @param doc
+     *            The {@link Document} containing the {@link Element}.
+     * @param tag
+     *            The tag name of the created {@link Element}.
+     * @param text
+     *            The content of the created {@link Element}.
+     * @return the {@link Element} created.
+     */
+    public static Element createField(Document doc, String tag, String text) {
+        Element elem = doc.createElement(tag);
+        elem.appendChild(doc.createTextNode(text));
+        return elem;
     }
 
     /**
@@ -52,7 +81,7 @@ public class XmlHelper {
      * 
      * @param doc
      *            The {@link Document} containing the {@link Element}.
-     * @param root
+     * @param parent
      *            The {@link Node} to append the created {@link Element} to.
      * @param tag
      *            The tag name of the created {@link Element}.
@@ -60,15 +89,15 @@ public class XmlHelper {
      *            The content of the created {@link Element}.
      * @return the {@link Element} created.
      */
-    public static Element appendField(Document doc, Element root, String tag, String text) {
-        Element elem = doc.createElement(tag);
-        elem.appendChild(doc.createTextNode(text));
-        root.appendChild(elem);
+    public static Element appendField(Document doc, Element parent, String tag, String text) {
+        Element elem = createField(doc, tag, text);
+        parent.appendChild(elem);
         return elem;
     }
 
     /**
-     * Returns the content of the first descendant node matching the specified tag.
+     * Returns the content of the first descendant of {@code ancestor} matching the
+     * specified tag.
      * <p>
      * Example:
      * 
@@ -86,18 +115,41 @@ public class XmlHelper {
      * 
      * </p>
      * 
-     * @param root
+     * @param ancestor
      *            The starting point in the XML tree to look for descendants.
      * @param tag
      *            The tag of the desired descendant.
-     * @return The content of the first descendant matching the tag.
+     * @return The content of the first descendant of {@code ancestor} matching the
+     *         tag, or {@code null} if no such descendant exists.
      */
-    public static String getField(Element root, String tag) {
-        NodeList children = root.getElementsByTagName(tag);
+    public static String getField(Element ancestor, String tag) {
+        NodeList children = ancestor.getElementsByTagName(tag);
         if (children.getLength() == 0) {
             return null;
         }
-        Node fieldNode = children.item(0).getFirstChild();
+        return getContent(children.item(0));
+    }
+
+    /**
+     * Returns the content of the specified node.
+     * <p>
+     * Example:
+     * 
+     * <pre>
+     * {@code <name>John</name>
+     * 
+     * getField(name); // returns "John"}
+     * </pre>
+     * 
+     * </p>
+     * 
+     * @param node
+     *            The node to get the field child from.
+     * @return The content of the specified node, or {@code null} if no such content
+     *         exists.
+     */
+    public static String getContent(Node node) {
+        Node fieldNode = node.getFirstChild();
         if (fieldNode == null) {
             return null;
         }

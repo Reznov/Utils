@@ -48,6 +48,16 @@ public class XmlHelper {
         return null;
     }
 
+    public static LinkedList<Element> getDirectChildren(Element parent) {
+        LinkedList<Element> list = new LinkedList<>();
+        for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {
+            if (child instanceof Element) {
+                list.add((Element) child);
+            }
+        }
+        return list;
+    }
+
     public static LinkedList<Element> getDirectChildren(Element parent, String tag) {
         LinkedList<Element> list = new LinkedList<>();
         for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {

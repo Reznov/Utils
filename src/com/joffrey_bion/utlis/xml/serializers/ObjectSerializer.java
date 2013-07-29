@@ -10,8 +10,15 @@ import org.w3c.dom.Element;
 import com.joffrey_bion.utils.xml.XmlHelper;
 
 /**
- * Represents an XML serializer for any class whose fields have a corresponding
- * {@link Serializer}.
+ * Represents an XML serializer for any class whose non-transient fields have a
+ * corresponding {@link Serializer}. Only the fields that have to be serialized have
+ * to be associated with a {@link Serializer}.
+ * <p>
+ * Note that the type variable here does not have to implement
+ * {@link java.io.Serializable}. Even if the concepts of {@code transient} and
+ * {@code non-transient} fields are used in the descriptions of the methods of this
+ * class, the keyword {@code transient} does not have to be used.
+ * </p>
  * 
  * @see Serializer
  * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>
@@ -78,8 +85,10 @@ public abstract class ObjectSerializer<T> extends Serializer<T> {
     }
 
     /**
-     * Returns a map containing the {@link Serializer} corresponding to each
-     * field of the serialized class.
+     * Returns the {@link Serializer}s of the fields that have to be serialized. The
+     * fields that are not present in the map will not be serialized (they have the
+     * same meaning as the {@code transient} fields of a {@link java.io.Serializable}
+     * ).
      * 
      * @return a map between the names of the fields and their corresponding
      *         {@link Serializer}.
@@ -87,8 +96,9 @@ public abstract class ObjectSerializer<T> extends Serializer<T> {
     protected abstract HashMap<String, Serializer<?>> getFieldsSpec();
 
     /**
-     * Returns a map containing the value corresponding to each field of the
-     * specified object.
+     * Returns a map containing the value corresponding to each non-transient field
+     * of the specified object. All the fields that appeared in the map returned by
+     * {@link #getFieldsSpec()} have to be present in the returned map of this method.
      * 
      * @param object
      *            The object to take the values from. It is guaranteed not to be

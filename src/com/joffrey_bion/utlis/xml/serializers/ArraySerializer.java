@@ -64,6 +64,15 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
         }
     };
     /**
+     * An XML serializer for arrays of {@link Long}.
+     */
+    static final ArraySerializer<Long> LONG_ARRAY = new ArraySerializer<Long>(LONG) {
+        @Override
+        protected Long[] getEmptyArray() {
+            return new Long[0];
+        }
+    };
+    /**
      * An XML serializer for arrays of {@link Short}.
      */
     static final ArraySerializer<Short> SHORT_ARRAY = new ArraySerializer<Short>(SHORT) {
@@ -79,15 +88,6 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
         @Override
         protected String[] getEmptyArray() {
             return new String[0];
-        }
-    };
-    /**
-     * An XML serializer for arrays of {@link Long}.
-     */
-    static final ArraySerializer<Long> LONG_ARRAY = new ArraySerializer<Long>(LONG) {
-        @Override
-        protected Long[] getEmptyArray() {
-            return new Long[0];
         }
     };
 

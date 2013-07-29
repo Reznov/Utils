@@ -1,6 +1,5 @@
 package com.joffrey_bion.utils.xml_helper;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -23,22 +22,72 @@ import org.xml.sax.SAXException;
 
 public class XmlHelper {
 
-    public static Document createEmptyDomDocument() throws ParserConfigurationException {
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        return documentBuilder.newDocument();
+    /**
+     * Creates a new empty DOM {@link Document}.
+     * 
+     * @return the created {@code Document}.
+     */
+    public static Document createEmptyDomDocument() {
+        try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            return documentBuilder.newDocument();
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException("Internal error: ParserConfigurationException: "
+                    + e.getMessage());
+        }
     }
 
-    public static Document getDomDocumentFromFile(String xmlFilePath)
-            throws ParserConfigurationException, SAXException, IOException, FileNotFoundException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        // use the factory to take an instance of the document builder
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        // parse using the builder to get the DOM mapping of the
-        // XML file
-        return db.parse(XmlHelper.fixURI(xmlFilePath));
+    /**
+     * Parses the specified XML file and returns it as a {@link Document}.
+     * 
+     * @param xmlFilePath
+     *            The path to the file to parse.
+     * @return The {@code Document} created from the file.
+     * @throws SAXException
+     *             If any parse error occurs.
+     * @throws IOException
+     *             If any IO error occurs.
+     */
+    public static Document getDomDocumentFromFile(String xmlFilePath) throws SAXException,
+            IOException {
+        try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            return documentBuilder.parse(XmlHelper.fixURI(xmlFilePath));
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException("Internal error: ParserConfigurationException: "
+                    + e.getMessage());
+        }
     }
 
+    /**
+     * Returns the first direct child of the given element whose name matches
+     * {@code tag}.
+     * <p>
+     * Example: let the {@link Element} {@code root} correspond to:
+     * 
+     * <pre>
+     * {@code <root>
+     *     <name>
+     *         <first>John</first>
+     *         <last>Smith</last>
+     *     </name>
+     *     <last>BlahBlah</last>
+     * </root>
+     * 
+     * getFirstDirectChild(root, "last"); // returns "BlahBlah"}
+     * </pre>
+     * 
+     * </p>
+     * 
+     * @param parent
+     *            The {@link Element} to get the child from.
+     * @param tag
+     *            The element name of the child to look for.
+     * @return The {@link Element} corresponding to the child if any was found, null
+     *         otherwise.
+     */
     public static Element getFirstDirectChild(Element parent, String tag) {
         for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {
             if (child instanceof Element && tag.equals(child.getNodeName())) {
@@ -48,6 +97,13 @@ public class XmlHelper {
         return null;
     }
 
+    /**
+     * Returns a list of the direct {@link Element} children of the given element.
+     * 
+     * @param parent
+     *            The {@link Element} to get the children from.
+     * @return A {@link LinkedList} of the children {@link Element}s.
+     */
     public static LinkedList<Element> getDirectChildren(Element parent) {
         LinkedList<Element> list = new LinkedList<>();
         for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {
@@ -58,6 +114,16 @@ public class XmlHelper {
         return list;
     }
 
+    /**
+     * Returns a list of the direct {@link Element} children of the given element
+     * whose names match {@code tag}.
+     * 
+     * @param parent
+     *            The {@link Element} to get the children from.
+     * @param tag
+     *            The element name of the children to look for.
+     * @return A {@link LinkedList} of the children {@link Element}s.
+     */
     public static LinkedList<Element> getDirectChildren(Element parent, String tag) {
         LinkedList<Element> list = new LinkedList<>();
         for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {
@@ -107,9 +173,9 @@ public class XmlHelper {
 
     /**
      * Returns the content of the first descendant of {@code ancestor} matching the
-     * specified tag.
+     * specified {@code tag}.
      * <p>
-     * Example:
+     * Example: let the {@link Element} {@code root} correspond to:
      * 
      * <pre>
      * {@code <root>
@@ -148,7 +214,7 @@ public class XmlHelper {
      * <pre>
      * {@code <name>John</name>
      * 
-     * getField(name); // returns "John"}
+     * getContent(name); // returns "John"}
      * </pre>
      * 
      * </p>

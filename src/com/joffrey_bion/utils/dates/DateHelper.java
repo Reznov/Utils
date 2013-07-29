@@ -18,6 +18,10 @@ public class DateHelper {
     private static final String TIME = "HH:mm:ss";
     private static final String MILLIS = ".SSS";
 
+    public static String format(long milliseconds, String pattern) {
+        return new SimpleDateFormat(pattern, Locale.US).format(new Date(milliseconds));
+    }
+
     public static String toDate(long milliseconds) {
         return format(milliseconds, DATE);
     }
@@ -36,10 +40,6 @@ public class DateHelper {
 
     public static String toDateTimeMillis(long milliseconds) {
         return format(milliseconds, DATE + DATE_TIME_SEP + TIME + MILLIS);
-    }
-
-    public static String format(long milliseconds, String pattern) {
-        return new SimpleDateFormat(pattern, Locale.US).format(new Date(milliseconds));
     }
 
     public static void displayTimestamp(String name, long timestampNanos) {

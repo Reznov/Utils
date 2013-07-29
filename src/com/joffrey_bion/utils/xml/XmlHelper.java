@@ -76,7 +76,7 @@ public class XmlHelper {
      *     <last>BlahBlah</last>
      * </root>
      * 
-     * getFirstDirectChild(root, "last"); // returns "BlahBlah"}
+     * getFirstDirectChild(root, "last"); // returns the element corresponding to <last>BlahBlah</last>}
      * </pre>
      * 
      * </p>
@@ -85,7 +85,7 @@ public class XmlHelper {
      *            The {@link Element} to get the child from.
      * @param tag
      *            The element name of the child to look for.
-     * @return The {@link Element} corresponding to the child if any was found, null
+     * @return The {@link Element} corresponding to the child if any was found, {@code null}
      *         otherwise.
      */
     public static Element getFirstDirectChild(Element parent, String tag) {

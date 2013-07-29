@@ -1,4 +1,4 @@
-package com.joffrey_bion.utils.xml_helper;
+package com.joffrey_bion.utils.xml;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

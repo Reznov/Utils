@@ -1,3 +1,4 @@
 com.joffrey_bion.utils.dates
 com.joffrey_bion.utils.stats
-com.joffrey_bion.utils.xml_helper
+com.joffrey_bion.utils.xml
+com.joffrey_bion.utlis.xml.serializers

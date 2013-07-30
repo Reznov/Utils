@@ -20,6 +20,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * A helper class to perform usual operations to create or read XML files.
+ * 
+ * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey BION</a>
+ */
 public class XmlHelper {
 
     /**
@@ -85,8 +90,8 @@ public class XmlHelper {
      *            The {@link Element} to get the child from.
      * @param tag
      *            The element name of the child to look for.
-     * @return The {@link Element} corresponding to the child if any was found, {@code null}
-     *         otherwise.
+     * @return The {@link Element} corresponding to the child if any was found,
+     *         {@code null} otherwise.
      */
     public static Element getFirstDirectChild(Element parent, String tag) {
         for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {
@@ -265,7 +270,7 @@ public class XmlHelper {
      *            The original URI.
      * @return The corrected URI.
      */
-    public static String fixURI(String uri) {
+    private static String fixURI(String uri) {
         // handle platform dependent strings
         String path = uri.replace(java.io.File.separatorChar, '/');
         // Windows fix

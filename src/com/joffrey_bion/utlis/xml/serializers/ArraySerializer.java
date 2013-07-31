@@ -36,6 +36,15 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
         }
     };
     /**
+     * An XML serializer for arrays of {@link Byte}.
+     */
+    static final ArraySerializer<Byte> BYTE_ARRAY = new ArraySerializer<Byte>(BYTE) {
+        @Override
+        protected Byte[] getEmptyArray() {
+            return new Byte[0];
+        }
+    };
+    /**
      * An XML serializer for arrays of {@link Character}.
      */
     static final ArraySerializer<Character> CHARACTER_ARRAY = new ArraySerializer<Character>(
@@ -52,6 +61,15 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
         @Override
         protected Double[] getEmptyArray() {
             return new Double[0];
+        }
+    };
+    /**
+     * An XML serializer for arrays of {@link Float}.
+     */
+    static final ArraySerializer<Float> FLOAT_ARRAY = new ArraySerializer<Float>(FLOAT) {
+        @Override
+        protected Float[] getEmptyArray() {
+            return new Float[0];
         }
     };
     /**

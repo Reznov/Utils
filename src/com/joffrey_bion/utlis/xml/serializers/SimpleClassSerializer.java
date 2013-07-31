@@ -46,6 +46,16 @@ public abstract class SimpleClassSerializer<T> extends Serializer<T> {
         }
     };
     /**
+     * An XML serializer for {@link Byte}s.
+     */
+    static final SimpleClassSerializer<Byte> BYTE = new SimpleClassSerializer<Byte>(
+            Byte.class) {
+        @Override
+        public Byte deserialize(String s) {
+            return Byte.parseByte(s);
+        }
+    };
+    /**
      * An XML serializer for {@link Character}s.
      */
     static final SimpleClassSerializer<Character> CHARACTER = new SimpleClassSerializer<Character>(
@@ -66,6 +76,16 @@ public abstract class SimpleClassSerializer<T> extends Serializer<T> {
         @Override
         public Double deserialize(String s) {
             return Double.parseDouble(s);
+        }
+    };
+    /**
+     * An XML serializer for {@link Float}s.
+     */
+    static final SimpleClassSerializer<Float> FLOAT = new SimpleClassSerializer<Float>(
+            Float.class) {
+        @Override
+        public Float deserialize(String s) {
+            return Float.parseFloat(s);
         }
     };
     /**
@@ -134,7 +154,7 @@ public abstract class SimpleClassSerializer<T> extends Serializer<T> {
      * Converts the specified object into a {@code String}.
      * 
      * @param object
-     *            The object to serialize.
+     *            The non-null object to serialize.
      * @return The serialized {@code String}.
      */
     protected String serialize(T object) {

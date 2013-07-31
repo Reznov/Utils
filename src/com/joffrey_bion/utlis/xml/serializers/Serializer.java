@@ -30,6 +30,10 @@ public abstract class Serializer<T> {
      */
     public static final SimpleClassSerializer<Boolean> BOOLEAN = SimpleClassSerializer.BOOLEAN;
     /**
+     * An XML serializer for {@link Byte}s.
+     */
+    public static final SimpleClassSerializer<Byte> BYTE = SimpleClassSerializer.BYTE;
+    /**
      * An XML serializer for {@link Character}s.
      */
     public static final SimpleClassSerializer<Character> CHARACTER = SimpleClassSerializer.CHARACTER;
@@ -37,6 +41,10 @@ public abstract class Serializer<T> {
      * An XML serializer for {@link Double}s.
      */
     public static final SimpleClassSerializer<Double> DOUBLE = SimpleClassSerializer.DOUBLE;
+    /**
+     * An XML serializer for {@link Float}s.
+     */
+    public static final SimpleClassSerializer<Float> FLOAT = SimpleClassSerializer.FLOAT;
     /**
      * An XML serializer for {@link Integer}s.
      */
@@ -56,31 +64,39 @@ public abstract class Serializer<T> {
     /**
      * An XML serializer for arrays of {@link Boolean}.
      */
-    public static final Serializer<Boolean[]> BOOLEAN_ARRAY = ArraySerializer.BOOLEAN_ARRAY;
+    public static final ArraySerializer<Boolean> BOOLEAN_ARRAY = ArraySerializer.BOOLEAN_ARRAY;
+    /**
+     * An XML serializer for arrays of {@link Byte}.
+     */
+    public static final ArraySerializer<Byte> BYTE_ARRAY = ArraySerializer.BYTE_ARRAY;
     /**
      * An XML serializer for arrays of {@link Character}.
      */
-    public static final Serializer<Character[]> CHARACTER_ARRAY = ArraySerializer.CHARACTER_ARRAY;
+    public static final ArraySerializer<Character> CHARACTER_ARRAY = ArraySerializer.CHARACTER_ARRAY;
     /**
      * An XML serializer for arrays of {@link Double}.
      */
-    public static final Serializer<Double[]> DOUBLE_ARRAY = ArraySerializer.DOUBLE_ARRAY;
+    public static final ArraySerializer<Double> DOUBLE_ARRAY = ArraySerializer.DOUBLE_ARRAY;
+    /**
+     * An XML serializer for arrays of {@link Float}.
+     */
+    public static final ArraySerializer<Float> FLOAT_ARRAY = ArraySerializer.FLOAT_ARRAY;
     /**
      * An XML serializer for arrays of {@link Integer}.
      */
-    public static final Serializer<Integer[]> INTEGER_ARRAY = ArraySerializer.INTEGER_ARRAY;
+    public static final ArraySerializer<Integer> INTEGER_ARRAY = ArraySerializer.INTEGER_ARRAY;
     /**
      * An XML serializer for arrays of {@link Long}.
      */
-    public static final Serializer<Long[]> LONG_ARRAY = ArraySerializer.LONG_ARRAY;
+    public static final ArraySerializer<Long> LONG_ARRAY = ArraySerializer.LONG_ARRAY;
     /**
      * An XML serializer for arrays of {@link Short}.
      */
-    public static final Serializer<Short[]> SHORT_ARRAY = ArraySerializer.SHORT_ARRAY;
+    public static final ArraySerializer<Short> SHORT_ARRAY = ArraySerializer.SHORT_ARRAY;
     /**
      * An XML serializer for arrays of {@link String}.
      */
-    public static final Serializer<String[]> STRING_ARRAY = ArraySerializer.STRING_ARRAY;
+    public static final ArraySerializer<String> STRING_ARRAY = ArraySerializer.STRING_ARRAY;
 
     /**
      * The attribute name to indicate a {@code null} object.

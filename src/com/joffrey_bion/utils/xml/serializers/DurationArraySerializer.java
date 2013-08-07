@@ -1,4 +1,4 @@
-package com.joffrey_bion.utlis.xml.serializers;
+package com.joffrey_bion.utils.xml.serializers;
 
 /**
  * An XML serializer for arrays of durations expressed as {@link Long}s.

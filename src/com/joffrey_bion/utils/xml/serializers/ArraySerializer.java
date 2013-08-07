@@ -1,4 +1,4 @@
-package com.joffrey_bion.utlis.xml.serializers;
+package com.joffrey_bion.utils.xml.serializers;
 
 import java.lang.reflect.Array;
 import java.text.ParseException;

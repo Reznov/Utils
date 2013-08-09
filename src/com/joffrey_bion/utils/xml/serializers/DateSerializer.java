@@ -9,10 +9,10 @@ import com.joffrey_bion.utils.dates.DateHelper;
  * 
  * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey BION</a>
  */
-public class DateSerializer extends SimpleClassSerializer<Long> {
+public class DateSerializer extends SimpleSerializer<Long> {
 
     private final String format;
-    
+
     /**
      * Creates an XML serializer for dates.
      * 
@@ -25,12 +25,12 @@ public class DateSerializer extends SimpleClassSerializer<Long> {
     }
 
     @Override
-    protected String serialize(Long millis) {
-        return DateHelper.format(millis, format);
+    public String serialize(Object millis) throws ClassCastException {
+        return DateHelper.format((Long) millis, format);
     }
 
     @Override
-    protected Long deserialize(String s) throws ParseException {
+    public Long deserialize(String s) throws ParseException {
         return DateHelper.timestampStrToMillis(s, format);
     }
 

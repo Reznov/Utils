@@ -9,7 +9,7 @@ import org.w3c.dom.Element;
  * Represents an XML serializer for the class given to the constructor, which also
  * corresponds to the type variable of this generic class.
  * <p>
- * This base abstract class is already subclassed into {@link SimpleClassSerializer}s
+ * This base abstract class is already subclassed into {@link SimpleSerializer}s
  * and {@link ArraySerializer}s for some basic classes. These anonymous subclasses
  * are instantiated in the public fields of this class. In particular, there are
  * {@code Serializer}s for every primitive type wrapper class, and the corresponding
@@ -18,85 +18,12 @@ import org.w3c.dom.Element;
  * <p>
  * This class should not be directly subclassed. To create your own
  * {@link Serializer}, extending either {@link ObjectSerializer},
- * {@link SimpleClassSerializer} or {@link ArraySerializer} should be sufficient.
+ * {@link SimpleSerializer} or {@link ArraySerializer} should be sufficient.
  * </p>
  * 
  * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>
  */
 public abstract class Serializer<T> {
-
-    /**
-     * An XML serializer for {@link Boolean}s.
-     */
-    public static final SimpleClassSerializer<Boolean> BOOLEAN = SimpleClassSerializer.BOOLEAN;
-    /**
-     * An XML serializer for {@link Byte}s.
-     */
-    public static final SimpleClassSerializer<Byte> BYTE = SimpleClassSerializer.BYTE;
-    /**
-     * An XML serializer for {@link Character}s.
-     */
-    public static final SimpleClassSerializer<Character> CHARACTER = SimpleClassSerializer.CHARACTER;
-    /**
-     * An XML serializer for {@link Double}s.
-     */
-    public static final SimpleClassSerializer<Double> DOUBLE = SimpleClassSerializer.DOUBLE;
-    /**
-     * An XML serializer for {@link Float}s.
-     */
-    public static final SimpleClassSerializer<Float> FLOAT = SimpleClassSerializer.FLOAT;
-    /**
-     * An XML serializer for {@link Integer}s.
-     */
-    public static final SimpleClassSerializer<Integer> INTEGER = SimpleClassSerializer.INTEGER;
-    /**
-     * An XML serializer for {@link Long}s.
-     */
-    public static final SimpleClassSerializer<Long> LONG = SimpleClassSerializer.LONG;
-    /**
-     * An XML serializer for {@link Short}s.
-     */
-    public static final SimpleClassSerializer<Short> SHORT = SimpleClassSerializer.SHORT;
-    /**
-     * An XML serializer for {@link String}s.
-     */
-    public static final SimpleClassSerializer<String> STRING = SimpleClassSerializer.STRING;
-    /**
-     * An XML serializer for arrays of {@link Boolean}.
-     */
-    public static final ArraySerializer<Boolean> BOOLEAN_ARRAY = ArraySerializer.BOOLEAN_ARRAY;
-    /**
-     * An XML serializer for arrays of {@link Byte}.
-     */
-    public static final ArraySerializer<Byte> BYTE_ARRAY = ArraySerializer.BYTE_ARRAY;
-    /**
-     * An XML serializer for arrays of {@link Character}.
-     */
-    public static final ArraySerializer<Character> CHARACTER_ARRAY = ArraySerializer.CHARACTER_ARRAY;
-    /**
-     * An XML serializer for arrays of {@link Double}.
-     */
-    public static final ArraySerializer<Double> DOUBLE_ARRAY = ArraySerializer.DOUBLE_ARRAY;
-    /**
-     * An XML serializer for arrays of {@link Float}.
-     */
-    public static final ArraySerializer<Float> FLOAT_ARRAY = ArraySerializer.FLOAT_ARRAY;
-    /**
-     * An XML serializer for arrays of {@link Integer}.
-     */
-    public static final ArraySerializer<Integer> INTEGER_ARRAY = ArraySerializer.INTEGER_ARRAY;
-    /**
-     * An XML serializer for arrays of {@link Long}.
-     */
-    public static final ArraySerializer<Long> LONG_ARRAY = ArraySerializer.LONG_ARRAY;
-    /**
-     * An XML serializer for arrays of {@link Short}.
-     */
-    public static final ArraySerializer<Short> SHORT_ARRAY = ArraySerializer.SHORT_ARRAY;
-    /**
-     * An XML serializer for arrays of {@link String}.
-     */
-    public static final ArraySerializer<String> STRING_ARRAY = ArraySerializer.STRING_ARRAY;
 
     /**
      * The attribute name to indicate a {@code null} object.
@@ -215,5 +142,13 @@ public abstract class Serializer<T> {
     @Override
     public String toString() {
         return getTypeName() + " serializer";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || !(o instanceof Serializer)) {
+            return false;
+        }
+        return clazz.equals(((Serializer<?>) o).clazz);
     }
 }

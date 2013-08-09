@@ -1,7 +1,7 @@
 package com.joffrey_bion.utils.xml.serializers;
 
 /**
- * An XML serializer for arrays of durations expressed as {@link Long}s.
+ * An XML serializer for arrays of durations expressed as {@link Long}s in milliseconds.
  */
 public class DurationArraySerializer extends ArraySerializer<Long> {
 

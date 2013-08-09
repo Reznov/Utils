@@ -15,7 +15,7 @@ public class Classifier<Level> {
     private LinkedList<CutPoint> cutPoints;
 
     /**
-     * A little helper class to specifiy a level and its upper limit.
+     * A little helper class to specify a level and its upper limit.
      */
     private class CutPoint {
         /** The name of the level of activity corresponding to this CutPoint. */

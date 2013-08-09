@@ -12,24 +12,24 @@ import com.joffrey_bion.utils.xml.XmlHelper;
 /**
  * Represents an XML serializer for arrays of objects from the type variable's class.
  * The class of the components of such arrays must have a corresponding
- * {@link SimpleClassSerializer}.
+ * {@link SimpleSerializer}.
  * 
  * @see Serializer
- * @see SimpleClassSerializer
+ * @see SimpleSerializer
  * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>
  */
 public abstract class ArraySerializer<T> extends Serializer<T[]> {
 
     /**
-     * The separator to use between each component of the array in the serialized
-     * string.
+     * The name of the XML elements used for each component of the serialized arrays.
      */
     private static final String ITEM_TAG = "item";
 
     /**
      * An XML serializer for arrays of {@link Boolean}.
      */
-    static final ArraySerializer<Boolean> BOOLEAN_ARRAY = new ArraySerializer<Boolean>(BOOLEAN) {
+    public static final ArraySerializer<Boolean> BOOLEAN_ARRAY = new ArraySerializer<Boolean>(
+            SimpleSerializer.BOOLEAN) {
         @Override
         protected Boolean[] getEmptyArray() {
             return new Boolean[0];
@@ -38,7 +38,8 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
     /**
      * An XML serializer for arrays of {@link Byte}.
      */
-    static final ArraySerializer<Byte> BYTE_ARRAY = new ArraySerializer<Byte>(BYTE) {
+    public static final ArraySerializer<Byte> BYTE_ARRAY = new ArraySerializer<Byte>(
+            SimpleSerializer.BYTE) {
         @Override
         protected Byte[] getEmptyArray() {
             return new Byte[0];
@@ -47,8 +48,8 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
     /**
      * An XML serializer for arrays of {@link Character}.
      */
-    static final ArraySerializer<Character> CHARACTER_ARRAY = new ArraySerializer<Character>(
-            CHARACTER) {
+    public static final ArraySerializer<Character> CHARACTER_ARRAY = new ArraySerializer<Character>(
+            SimpleSerializer.CHARACTER) {
         @Override
         protected Character[] getEmptyArray() {
             return new Character[0];
@@ -57,7 +58,8 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
     /**
      * An XML serializer for arrays of {@link Double}.
      */
-    static final ArraySerializer<Double> DOUBLE_ARRAY = new ArraySerializer<Double>(DOUBLE) {
+    public static final ArraySerializer<Double> DOUBLE_ARRAY = new ArraySerializer<Double>(
+            SimpleSerializer.DOUBLE) {
         @Override
         protected Double[] getEmptyArray() {
             return new Double[0];
@@ -66,7 +68,8 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
     /**
      * An XML serializer for arrays of {@link Float}.
      */
-    static final ArraySerializer<Float> FLOAT_ARRAY = new ArraySerializer<Float>(FLOAT) {
+    public static final ArraySerializer<Float> FLOAT_ARRAY = new ArraySerializer<Float>(
+            SimpleSerializer.FLOAT) {
         @Override
         protected Float[] getEmptyArray() {
             return new Float[0];
@@ -75,7 +78,8 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
     /**
      * An XML serializer for arrays of {@link Integer}.
      */
-    static final ArraySerializer<Integer> INTEGER_ARRAY = new ArraySerializer<Integer>(INTEGER) {
+    public static final ArraySerializer<Integer> INTEGER_ARRAY = new ArraySerializer<Integer>(
+            SimpleSerializer.INTEGER) {
         @Override
         protected Integer[] getEmptyArray() {
             return new Integer[0];
@@ -84,7 +88,8 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
     /**
      * An XML serializer for arrays of {@link Long}.
      */
-    static final ArraySerializer<Long> LONG_ARRAY = new ArraySerializer<Long>(LONG) {
+    public static final ArraySerializer<Long> LONG_ARRAY = new ArraySerializer<Long>(
+            SimpleSerializer.LONG) {
         @Override
         protected Long[] getEmptyArray() {
             return new Long[0];
@@ -93,7 +98,8 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
     /**
      * An XML serializer for arrays of {@link Short}.
      */
-    static final ArraySerializer<Short> SHORT_ARRAY = new ArraySerializer<Short>(SHORT) {
+    public static final ArraySerializer<Short> SHORT_ARRAY = new ArraySerializer<Short>(
+            SimpleSerializer.SHORT) {
         @Override
         protected Short[] getEmptyArray() {
             return new Short[0];
@@ -102,7 +108,8 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
     /**
      * An XML serializer for arrays of {@link String}.
      */
-    static final ArraySerializer<String> STRING_ARRAY = new ArraySerializer<String>(STRING) {
+    public static final ArraySerializer<String> STRING_ARRAY = new ArraySerializer<String>(
+            SimpleSerializer.STRING) {
         @Override
         protected String[] getEmptyArray() {
             return new String[0];
@@ -112,7 +119,7 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
     /**
      * The serializer to use for each component of the array.
      */
-    private SimpleClassSerializer<T> componentSerializer;
+    private final Serializer<T> componentSerializer;
 
     /**
      * Creates an {@link ArraySerializer} for arrays of objects that can be
@@ -123,7 +130,7 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
      *            arrays handled by this {@code ArraySerializer}.
      */
     @SuppressWarnings("unchecked")
-    public ArraySerializer(SimpleClassSerializer<T> componentSerializer) {
+    public ArraySerializer(Serializer<T> componentSerializer) {
         super((Class<T[]>) Array.newInstance(componentSerializer.clazz, 0).getClass());
         this.componentSerializer = componentSerializer;
     }
@@ -146,6 +153,63 @@ public abstract class ArraySerializer<T> extends Serializer<T[]> {
             items.add(componentSerializer.xmlToObject(eItem));
         }
         return items.toArray(getEmptyArray());
+    }
+
+    /**
+     * Returns a serialized version of the specified array.
+     * 
+     * @param values
+     *            The array of objects to serialize.
+     * @return A {@code String} array representing the serialized values of the
+     *         components of this array obtained via
+     *         {@link SimpleSerializer#serialize(Object)}. This method returns
+     *         {@code null} if {@code values} is {@code null}.
+     * @throws ClassCastException
+     *             If the class of the components of the specified array is not the
+     *             class handled by this {@link ArraySerializer}.
+     */
+    public String[] serialize(Object[] values) throws ClassCastException {
+        if (values == null) {
+            return null;
+        }
+        if (componentSerializer instanceof SimpleSerializer) {
+            SimpleSerializer<T> scs = (SimpleSerializer<T>) componentSerializer;
+            LinkedList<String> items = new LinkedList<>();
+            for (Object item : values) {
+                items.add(scs.serialize(scs.cast(item)));
+            }
+            return items.toArray(new String[0]);
+        } else {
+            throw new RuntimeException("Cannot deserialize, the component type is not a "
+                    + SimpleSerializer.class.getSimpleName());
+        }
+    }
+
+    /**
+     * Retrieves an array of objects corresponding to the specified array of
+     * {@code String}.
+     * 
+     * @param serializedValues
+     *            The array of values to assign to this parameter, in the serialized
+     *            {@link String} form.
+     * @return an array of objects obtained from each {@code String} via
+     *         {@link SimpleSerializer#deserialize(String)}.
+     * @throws ParseException
+     *             If the objects' class does not match the class handled by this
+     *             {@link ArraySerializer}.
+     */
+    public T[] deserialize(String[] serializedValues) throws ParseException {
+        if (componentSerializer instanceof SimpleSerializer) {
+            SimpleSerializer<T> scs = (SimpleSerializer<T>) componentSerializer;
+            LinkedList<T> items = new LinkedList<>();
+            for (String item : serializedValues) {
+                items.add(scs.deserialize(item));
+            }
+            return items.toArray(getEmptyArray());
+        } else {
+            throw new RuntimeException("Cannot deserialize, the component type is not a "
+                    + SimpleSerializer.class.getSimpleName());
+        }
     }
 
     /**

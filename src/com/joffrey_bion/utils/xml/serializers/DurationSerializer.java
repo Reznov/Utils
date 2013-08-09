@@ -9,7 +9,7 @@ import com.joffrey_bion.utils.dates.DurationHelper;
  * 
  * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey BION</a>
  */
-public class DurationSerializer extends SimpleClassSerializer<Long> {
+public class DurationSerializer extends SimpleSerializer<Long> {
 
     private final String format;
 
@@ -25,12 +25,12 @@ public class DurationSerializer extends SimpleClassSerializer<Long> {
     }
 
     @Override
-    protected String serialize(Long millis) {
-        return DurationHelper.format(millis, format);
+    public String serialize(Object millis) throws ClassCastException {
+        return DurationHelper.format((Long) millis, format);
     }
 
     @Override
-    protected Long deserialize(String s) throws ParseException {
+    public Long deserialize(String s) throws ParseException {
         return DurationHelper.strToMillis(s, format);
     }
 }

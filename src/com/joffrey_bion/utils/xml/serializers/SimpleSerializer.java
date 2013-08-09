@@ -10,16 +10,22 @@ import com.joffrey_bion.utils.xml.XmlHelper;
 /**
  * Represents an XML serializer for any class simple enough to be serialized as a
  * {@code String}.
+ * <p>
+ * The method {@link #deserialize(String)} has to be implemented in subclasses.
+ * However, it is not necessary to override {@link #serialize(Object)}. Indeed, a
+ * default version using the method {@link Object#toString()} is already implemented,
+ * and is sufficient in most cases.
+ * </p>
  * 
  * @see Serializer
  * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>
  */
-public abstract class SimpleClassSerializer<T> extends Serializer<T> {
+public abstract class SimpleSerializer<T> extends Serializer<T> {
 
     /**
      * An XML serializer for {@link Boolean}s.
      */
-    static final SimpleClassSerializer<Boolean> BOOLEAN = new SimpleClassSerializer<Boolean>(
+    public static final SimpleSerializer<Boolean> BOOLEAN = new SimpleSerializer<Boolean>(
             Boolean.class) {
         /**
          * Acceptable {@code String}s for {@code true}.
@@ -48,8 +54,7 @@ public abstract class SimpleClassSerializer<T> extends Serializer<T> {
     /**
      * An XML serializer for {@link Byte}s.
      */
-    static final SimpleClassSerializer<Byte> BYTE = new SimpleClassSerializer<Byte>(
-            Byte.class) {
+    public static final SimpleSerializer<Byte> BYTE = new SimpleSerializer<Byte>(Byte.class) {
         @Override
         public Byte deserialize(String s) {
             return Byte.parseByte(s);
@@ -58,7 +63,7 @@ public abstract class SimpleClassSerializer<T> extends Serializer<T> {
     /**
      * An XML serializer for {@link Character}s.
      */
-    static final SimpleClassSerializer<Character> CHARACTER = new SimpleClassSerializer<Character>(
+    public static final SimpleSerializer<Character> CHARACTER = new SimpleSerializer<Character>(
             Character.class) {
         @Override
         public Character deserialize(String s) throws ParseException {
@@ -71,8 +76,7 @@ public abstract class SimpleClassSerializer<T> extends Serializer<T> {
     /**
      * An XML serializer for {@link Double}s.
      */
-    static final SimpleClassSerializer<Double> DOUBLE = new SimpleClassSerializer<Double>(
-            Double.class) {
+    public static final SimpleSerializer<Double> DOUBLE = new SimpleSerializer<Double>(Double.class) {
         @Override
         public Double deserialize(String s) {
             return Double.parseDouble(s);
@@ -81,8 +85,7 @@ public abstract class SimpleClassSerializer<T> extends Serializer<T> {
     /**
      * An XML serializer for {@link Float}s.
      */
-    static final SimpleClassSerializer<Float> FLOAT = new SimpleClassSerializer<Float>(
-            Float.class) {
+    public static final SimpleSerializer<Float> FLOAT = new SimpleSerializer<Float>(Float.class) {
         @Override
         public Float deserialize(String s) {
             return Float.parseFloat(s);
@@ -91,7 +94,7 @@ public abstract class SimpleClassSerializer<T> extends Serializer<T> {
     /**
      * An XML serializer for {@link Integer}s.
      */
-    static final SimpleClassSerializer<Integer> INTEGER = new SimpleClassSerializer<Integer>(
+    public static final SimpleSerializer<Integer> INTEGER = new SimpleSerializer<Integer>(
             Integer.class) {
         @Override
         public Integer deserialize(String s) {
@@ -101,7 +104,7 @@ public abstract class SimpleClassSerializer<T> extends Serializer<T> {
     /**
      * An XML serializer for {@link Long}s.
      */
-    static final SimpleClassSerializer<Long> LONG = new SimpleClassSerializer<Long>(Long.class) {
+    public static final SimpleSerializer<Long> LONG = new SimpleSerializer<Long>(Long.class) {
         @Override
         public Long deserialize(String s) {
             return Long.parseLong(s);
@@ -110,7 +113,7 @@ public abstract class SimpleClassSerializer<T> extends Serializer<T> {
     /**
      * An XML serializer for {@link Short}s.
      */
-    static final SimpleClassSerializer<Short> SHORT = new SimpleClassSerializer<Short>(Short.class) {
+    public static final SimpleSerializer<Short> SHORT = new SimpleSerializer<Short>(Short.class) {
         @Override
         public Short deserialize(String s) {
             return Short.parseShort(s);
@@ -119,8 +122,7 @@ public abstract class SimpleClassSerializer<T> extends Serializer<T> {
     /**
      * An XML serializer for {@link String}s.
      */
-    static final SimpleClassSerializer<String> STRING = new SimpleClassSerializer<String>(
-            String.class) {
+    public static final SimpleSerializer<String> STRING = new SimpleSerializer<String>(String.class) {
         @Override
         public String deserialize(String s) {
             return s;
@@ -128,38 +130,45 @@ public abstract class SimpleClassSerializer<T> extends Serializer<T> {
     };
 
     /**
-     * Creates a {@code SimpleTypeSerializer} for the specified class.
+     * Creates a {@link SimpleSerializer} for the specified class.
      * 
      * @param clazz
-     *            The class handled by this serializer, which should correspond to the
-     *            type variable of this generic class.
+     *            The class handled by this serializer, which should correspond to
+     *            the type variable of this generic class.
      */
-    public SimpleClassSerializer(Class<T> clazz) {
+    public SimpleSerializer(Class<T> clazz) {
         super(clazz);
+    }
+
+    /**
+     * Converts the specified object into a {@code String}.
+     * 
+     * @param object
+     *            The object to serialize.
+     * @return The serialized {@code String}.
+     * @throws ClassCastException
+     *             If the class of the specified object is not consistent with the
+     *             class handled by this serializer.
+     */
+    public String serialize(Object object) throws ClassCastException {
+        if (object == null) {
+            return "null";
+        }
+        return cast(object).toString();
     }
 
     /**
      * Retrieves an object from the specified {@code String}.
      * 
      * @param s
-     *            The {@code String} to convert, which is guaranteed not to be null.
+     *            The {@code String} to convert, which is guaranteed not to be null,
+     *            though it may be equal to "null".
      * @return The created object.
      * @throws ParseException
      *             If the {@code String} cannot be parsed as an object of the class
      *             handled by this serializer.
      */
-    protected abstract T deserialize(String s) throws ParseException;
-
-    /**
-     * Converts the specified object into a {@code String}.
-     * 
-     * @param object
-     *            The non-null object to serialize.
-     * @return The serialized {@code String}.
-     */
-    protected String serialize(T object) {
-        return object.toString();
-    }
+    public abstract T deserialize(String s) throws ParseException;
 
     @Override
     protected Element nonNullObjectToXml(Document doc, String tag, T object) {

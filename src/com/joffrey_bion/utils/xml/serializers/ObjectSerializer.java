@@ -10,9 +10,9 @@ import org.w3c.dom.Element;
 import com.joffrey_bion.utils.xml.XmlHelper;
 
 /**
- * Represents an XML serializer for any class whose non-transient fields have a
- * corresponding {@link Serializer}. Only the fields that have to be serialized have
- * to be associated with a {@link Serializer}.
+ * An XML serializer for any class whose non-transient fields have a corresponding
+ * {@link Serializer}. Only the fields that have to be serialized have to be
+ * associated with a {@link Serializer}.
  * <p>
  * Note that the type variable here does not have to implement
  * {@link java.io.Serializable}. Even if the concepts of {@code transient} and
@@ -98,7 +98,8 @@ public abstract class ObjectSerializer<T> extends Serializer<T> {
     /**
      * Returns a map containing the value corresponding to each non-transient field
      * of the specified object. All the fields that appeared in the map returned by
-     * {@link #getFieldsSpec()} have to be present in the returned map of this method.
+     * {@link #getFieldsSpec()} have to be present in the returned map of this
+     * method.
      * 
      * @param object
      *            The object to take the values from. It is guaranteed not to be

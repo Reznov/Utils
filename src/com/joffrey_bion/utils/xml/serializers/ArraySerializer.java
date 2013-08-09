@@ -10,8 +10,8 @@ import org.w3c.dom.Element;
 import com.joffrey_bion.utils.xml.XmlHelper;
 
 /**
- * Represents an XML serializer for arrays of objects from the type variable's class.
- * The class of the components of such arrays must have a corresponding
+ * An XML serializer for arrays of objects from the type variable's class. The class
+ * of the components of such arrays must have a corresponding
  * {@link SimpleSerializer}.
  * 
  * @see Serializer

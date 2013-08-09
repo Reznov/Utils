@@ -8,8 +8,8 @@ import org.w3c.dom.Element;
 import com.joffrey_bion.utils.xml.XmlHelper;
 
 /**
- * Represents an XML serializer for any class simple enough to be serialized as a
- * {@code String}.
+ * An XML serializer for any class simple enough to be serialized as a {@code String}
+ * .
  * <p>
  * The method {@link #deserialize(String)} has to be implemented in subclasses.
  * However, it is not necessary to override {@link #serialize(Object)}. Indeed, a

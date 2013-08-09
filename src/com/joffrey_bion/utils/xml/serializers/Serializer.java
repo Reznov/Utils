@@ -6,12 +6,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * Represents an XML serializer for the class given to the constructor, which also
- * corresponds to the type variable of this generic class.
+ * An XML serializer for the class given to the constructor, which also corresponds
+ * to the type variable of this generic class.
  * <p>
- * This base abstract class is already subclassed into {@link SimpleSerializer}s
- * and {@link ArraySerializer}s for some basic classes. These anonymous subclasses
- * are instantiated in the public fields of this class. In particular, there are
+ * This base abstract class is already subclassed into {@link SimpleSerializer}s and
+ * {@link ArraySerializer}s for some basic classes. These anonymous subclasses are
+ * instantiated in the public fields of this class. In particular, there are
  * {@code Serializer}s for every primitive type wrapper class, and the corresponding
  * array classes.
  * </p>
@@ -21,6 +21,8 @@ import org.w3c.dom.Element;
  * {@link SimpleSerializer} or {@link ArraySerializer} should be sufficient.
  * </p>
  * 
+ * @see SimpleSerializer
+ * @see ArraySerializer
  * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>
  */
 public abstract class Serializer<T> {

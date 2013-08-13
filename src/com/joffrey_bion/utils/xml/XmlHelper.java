@@ -20,6 +20,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.joffrey_bion.utils.paths.Paths;
+
 /**
  * A helper class to perform usual operations to create or read XML files.
  * 
@@ -59,7 +61,7 @@ public class XmlHelper {
         try {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            return documentBuilder.parse(XmlHelper.fixURI(xmlFilePath));
+            return documentBuilder.parse(Paths.fixURI(xmlFilePath));
         } catch (ParserConfigurationException e) {
             throw new RuntimeException("Internal error: ParserConfigurationException: "
                     + e.getMessage());
@@ -261,54 +263,5 @@ public class XmlHelper {
         } catch (TransformerException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Fix problems in the URIs (spaces for instance).
-     * 
-     * @param uri
-     *            The original URI.
-     * @return The corrected URI.
-     */
-    private static String fixURI(String uri) {
-        // handle platform dependent strings
-        String path = uri.replace(java.io.File.separatorChar, '/');
-        // Windows fix
-        if (path.length() >= 2) {
-            char ch1 = path.charAt(1);
-            // change "C:blah" to "/C:blah"
-            if (ch1 == ':') {
-                char ch0 = Character.toUpperCase(path.charAt(0));
-                if (ch0 >= 'A' && ch0 <= 'Z') {
-                    path = "/" + path;
-                }
-            }
-            // change "//blah" to "file://blah"
-            else if (ch1 == '/' && path.charAt(0) == '/') {
-                path = "file:" + path;
-            }
-        }
-        // replace spaces in file names with %20.
-        // Original comment from JDK5: the following algorithm might not be
-        // very performant, but people who want to use invalid URI's have to
-        // pay the price.
-        int pos = path.indexOf(' ');
-        if (pos >= 0) {
-            StringBuilder sb = new StringBuilder(path.length());
-            // put characters before ' ' into the string builder
-            for (int i = 0; i < pos; i++)
-                sb.append(path.charAt(i));
-            // and %20 for the space
-            sb.append("%20");
-            // for the remaining part, also convert ' ' to "%20".
-            for (int i = pos + 1; i < path.length(); i++) {
-                if (path.charAt(i) == ' ')
-                    sb.append("%20");
-                else
-                    sb.append(path.charAt(i));
-            }
-            return sb.toString();
-        }
-        return path;
     }
 }

@@ -9,13 +9,13 @@ public class Paths {
 
     /**
      * Returns the path to the directory containing the Jar that contains the
-     * specified class. If this code is not run from a Jar file, the user's home
-     * directory is returned.
+     * specified class.
      * 
      * @param clazz
      *            The class to look for.
      * @return The path to the parent directory of the Jar file containing the
-     *         specified class.
+     *         specified class, or {@code null} if this code is not run
+     *         from a Jar file.
      * @throws MalformedURLException
      * @throws URISyntaxException
      */
@@ -30,8 +30,8 @@ public class Paths {
             File file = new File(url.toURI());
             return file.getParent();
         } else {
-            System.err.println("Not running a Jar file, returning user home directory.");
-            return System.getProperty("user.home");
+            System.err.println("Calling getJarLocation() while not running a Jar file.");
+            return null;
         }
     }
 

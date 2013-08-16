@@ -60,6 +60,7 @@ public class DateHelper {
     public static long timestampStrToMillis(String timestamp, String formatPattern)
             throws ParseException {
         DateFormat df = new SimpleDateFormat(formatPattern);
+        df.setLenient(false);
         Date date;
         try {
             date = df.parse(timestamp);

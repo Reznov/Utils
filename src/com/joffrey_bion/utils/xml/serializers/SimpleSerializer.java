@@ -56,8 +56,14 @@ public abstract class SimpleSerializer<T> extends Serializer<T> {
      */
     public static final SimpleSerializer<Byte> BYTE = new SimpleSerializer<Byte>(Byte.class) {
         @Override
-        public Byte deserialize(String s) {
-            return Byte.parseByte(s);
+        public Byte deserialize(String s) throws ParseException {
+            try {
+                return Byte.parseByte(s);
+            } catch (NumberFormatException e) {
+                throw (ParseException) new ParseException("Cannot parse '" + s + "' as a "
+                        + Byte.class.getSimpleName() + " (incorrect number format)", 1)
+                        .initCause(e);
+            }
         }
     };
     /**
@@ -68,7 +74,8 @@ public abstract class SimpleSerializer<T> extends Serializer<T> {
         @Override
         public Character deserialize(String s) throws ParseException {
             if (s.length() != 1) {
-                throw new ParseException("Cannot parse '" + s + "' as a Character.", 1);
+                throw new ParseException("Cannot parse '" + s + "' as a "
+                        + Character.class.getSimpleName() + ".", 1);
             }
             return s.charAt(0);
         }
@@ -78,8 +85,14 @@ public abstract class SimpleSerializer<T> extends Serializer<T> {
      */
     public static final SimpleSerializer<Double> DOUBLE = new SimpleSerializer<Double>(Double.class) {
         @Override
-        public Double deserialize(String s) {
-            return Double.parseDouble(s);
+        public Double deserialize(String s) throws ParseException {
+            try {
+                return Double.parseDouble(s);
+            } catch (NumberFormatException e) {
+                throw (ParseException) new ParseException("Cannot parse '" + s + "' as a "
+                        + Double.class.getSimpleName() + " (incorrect number format)", 1)
+                        .initCause(e);
+            }
         }
     };
     /**
@@ -87,8 +100,14 @@ public abstract class SimpleSerializer<T> extends Serializer<T> {
      */
     public static final SimpleSerializer<Float> FLOAT = new SimpleSerializer<Float>(Float.class) {
         @Override
-        public Float deserialize(String s) {
-            return Float.parseFloat(s);
+        public Float deserialize(String s) throws ParseException {
+            try {
+                return Float.parseFloat(s);
+            } catch (NumberFormatException e) {
+                throw (ParseException) new ParseException("Cannot parse '" + s + "' as a "
+                        + Float.class.getSimpleName() + " (incorrect number format)", 1)
+                        .initCause(e);
+            }
         }
     };
     /**
@@ -97,8 +116,14 @@ public abstract class SimpleSerializer<T> extends Serializer<T> {
     public static final SimpleSerializer<Integer> INTEGER = new SimpleSerializer<Integer>(
             Integer.class) {
         @Override
-        public Integer deserialize(String s) {
-            return Integer.parseInt(s);
+        public Integer deserialize(String s) throws ParseException {
+            try {
+                return Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                throw (ParseException) new ParseException("Cannot parse '" + s + "' as a "
+                        + Integer.class.getSimpleName() + " (incorrect number format)", 1)
+                        .initCause(e);
+            }
         }
     };
     /**
@@ -106,8 +131,14 @@ public abstract class SimpleSerializer<T> extends Serializer<T> {
      */
     public static final SimpleSerializer<Long> LONG = new SimpleSerializer<Long>(Long.class) {
         @Override
-        public Long deserialize(String s) {
-            return Long.parseLong(s);
+        public Long deserialize(String s) throws ParseException {
+            try {
+                return Long.parseLong(s);
+            } catch (NumberFormatException e) {
+                throw (ParseException) new ParseException("Cannot parse '" + s + "' as a "
+                        + Long.class.getSimpleName() + " (incorrect number format)", 1)
+                        .initCause(e);
+            }
         }
     };
     /**
@@ -115,8 +146,14 @@ public abstract class SimpleSerializer<T> extends Serializer<T> {
      */
     public static final SimpleSerializer<Short> SHORT = new SimpleSerializer<Short>(Short.class) {
         @Override
-        public Short deserialize(String s) {
-            return Short.parseShort(s);
+        public Short deserialize(String s) throws ParseException {
+            try {
+                return Short.parseShort(s);
+            } catch (NumberFormatException e) {
+                throw (ParseException) new ParseException("Cannot parse '" + s + "' as a "
+                        + Short.class.getSimpleName() + " (incorrect number format)", 1)
+                        .initCause(e);
+            }
         }
     };
     /**

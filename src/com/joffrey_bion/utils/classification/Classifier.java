@@ -1,4 +1,4 @@
-package com.joffrey_bion.utils.classifier;
+package com.joffrey_bion.utils.classification;
 
 import java.util.LinkedList;
 
@@ -13,6 +13,7 @@ import java.util.LinkedList;
 public class Classifier<Level> {
 
     private LinkedList<CutPoint> cutPoints;
+    private Level[] levels;
 
     /**
      * A little helper class to specify a level and its upper limit.
@@ -46,6 +47,7 @@ public class Classifier<Level> {
         if (levels.length != thresholds.length + 1) {
             throw new IllegalArgumentException("There must be n-1 values to separate n labels.");
         }
+        this.levels = levels;
         this.cutPoints = new LinkedList<>();
         for (int i = 0; i < thresholds.length; i++) {
             this.cutPoints.add(new CutPoint(levels[i], thresholds[i]));
@@ -71,4 +73,12 @@ public class Classifier<Level> {
         throw new RuntimeException("Internal error: no level matched the value " + value + ".");
     }
 
+    /**
+     * Return the possible levels of classification.
+     * 
+     * @return the possible levels of classification.
+     */
+    public Level[] getLevels() {
+        return levels;
+    }
 }

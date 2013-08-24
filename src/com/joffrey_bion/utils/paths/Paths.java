@@ -34,6 +34,28 @@ public class Paths {
             return null;
         }
     }
+    
+    public static String relativize(String baseDir, String absolutePath) {
+        java.nio.file.Path abs = java.nio.file.Paths.get(absolutePath);
+        java.nio.file.Path base = java.nio.file.Paths.get(baseDir);
+        return base.relativize(abs).toString();
+    }
+    
+    public static String relativizeSibling(String baseFile, String absolutePath) {
+        java.nio.file.Path abs = java.nio.file.Paths.get(absolutePath);
+        java.nio.file.Path base = java.nio.file.Paths.get(baseFile).getParent();
+        return base.relativize(abs).toString();
+    }
+
+    public static String resolve(String baseDir, String relativePath) {
+        java.nio.file.Path base = java.nio.file.Paths.get(baseDir);
+        return base.resolve(relativePath).toString();
+    }
+
+    public static String resolveSibling(String baseFile, String relativePath) {
+        java.nio.file.Path base = java.nio.file.Paths.get(baseFile);
+        return base.resolveSibling(relativePath).toString();
+    }
 
     /**
      * Fix problems in the URIs (spaces for instance).

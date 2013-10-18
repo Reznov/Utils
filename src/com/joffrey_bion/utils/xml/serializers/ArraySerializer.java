@@ -14,6 +14,9 @@ import com.joffrey_bion.utils.xml.XmlHelper;
  * of the components of such arrays must have a corresponding
  * {@link SimpleSerializer}.
  * 
+ * @param <T>
+ *            The type of the components of the serialized arrays managed by this
+ *            serializer.
  * @see Serializer
  * @see SimpleSerializer
  * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>

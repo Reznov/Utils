@@ -16,8 +16,8 @@ public class Paths {
      * @return The path to the parent directory of the Jar file containing the
      *         specified class, or {@code null} if this code is not run
      *         from a Jar file.
-     * @throws MalformedURLException
-     * @throws URISyntaxException
+     * @throws MalformedURLException If an error occurs.
+     * @throws URISyntaxException If an error occurs.
      */
     public static String getJarLocation(Class<?> clazz) throws MalformedURLException,
             URISyntaxException {
@@ -26,8 +26,7 @@ public class Paths {
         int exclMarkIndex = urlString.indexOf('!');
         if (exclMarkIndex != -1) {
             urlString = urlString.substring(urlString.indexOf("file:"), exclMarkIndex);
-            URL url = new URL(urlString);
-            File file = new File(url.toURI());
+            File file = new File(new URL(urlString).toURI());
             return file.getParent();
         } else {
             System.err.println("Calling getJarLocation() while not running a Jar file.");

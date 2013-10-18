@@ -61,6 +61,8 @@ public class FlowStats implements Cloneable {
 
     /**
      * Return the number of values that were put in this series.
+     * 
+     * @return the number of values that were put in this series.
      */
     public int getNbValues() {
         return nbValues;
@@ -68,6 +70,8 @@ public class FlowStats implements Cloneable {
 
     /**
      * Return the total weight of the values that were put in this series.
+     * 
+     * @return Return the total weight of the values that were put in this series.
      */
     public double getTotalWeight() {
         return totalWeight;
@@ -140,6 +144,8 @@ public class FlowStats implements Cloneable {
 
     /**
      * Returns the mean of this series of values.
+     * 
+     * @return the mean of this series of values.
      */
     public double mean() {
         if (totalWeight == 0) {
@@ -150,6 +156,8 @@ public class FlowStats implements Cloneable {
 
     /**
      * Returns the variance of this series of values.
+     * 
+     * @return the variance of this series of values.
      */
     public double variance() {
         if (totalWeight == 0) {
@@ -161,6 +169,8 @@ public class FlowStats implements Cloneable {
 
     /**
      * Returns the standard deviation of this series of values.
+     * 
+     * @return the standard deviation of this series of values.
      */
     public double standardDeviation() {
         double var = variance();
@@ -169,6 +179,8 @@ public class FlowStats implements Cloneable {
 
     /**
      * Returns the coefficient of variation of this series of values.
+     * 
+     * @return the coefficient of variation of this series of values.
      */
     public double coeffOfVariation() {
         double mean = mean();

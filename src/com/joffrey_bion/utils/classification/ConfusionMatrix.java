@@ -323,7 +323,15 @@ public class ConfusionMatrix<T> {
             }
         };
 
-        /** Returns whether the given instance should be counted. */
+        /**
+         * Returns whether the given instance should be counted.
+         * 
+         * @param classIndex
+         *            The index of the class to compare the other index to.
+         * @param comparedIndex
+         *            The index of the class of the instance to check.
+         * @return {@code true} if the specified instance matches this filter.
+         */
         public abstract boolean keep(int classIndex, int comparedIndex);
     }
 

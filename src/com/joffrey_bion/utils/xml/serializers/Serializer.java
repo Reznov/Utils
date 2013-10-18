@@ -21,6 +21,8 @@ import org.w3c.dom.Element;
  * {@link SimpleSerializer} or {@link ArraySerializer} should be sufficient.
  * </p>
  * 
+ * @param <T>
+ *            The type managed by this serializer.
  * @see SimpleSerializer
  * @see ArraySerializer
  * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>

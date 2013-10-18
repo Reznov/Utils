@@ -17,6 +17,8 @@ import com.joffrey_bion.utils.xml.XmlHelper;
  * and is sufficient in most cases.
  * </p>
  * 
+ * @param <T>
+ *            The type managed by this serializer.
  * @see Serializer
  * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>
  */

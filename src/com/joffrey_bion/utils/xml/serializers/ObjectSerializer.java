@@ -20,6 +20,8 @@ import com.joffrey_bion.utils.xml.XmlHelper;
  * class, the keyword {@code transient} does not have to be used.
  * </p>
  * 
+ * @param <T>
+ *            The type managed by this serializer.
  * @see Serializer
  * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>
  */

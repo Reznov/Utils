@@ -9,6 +9,7 @@ import java.util.LinkedList;
  * the last has no upper bound.
  * 
  * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey BION</a>
+ * @param <Level> The type (java class) of the classification classes.
  */
 public class Classifier<Level> {
 

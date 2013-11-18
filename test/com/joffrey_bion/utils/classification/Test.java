@@ -1,4 +1,4 @@
-package com.joffrey_bion.utils.classification;
+package com.jbion.utils.classification;
 
 import java.util.ArrayList;
 

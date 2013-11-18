@@ -1,5 +1,5 @@
-com.joffrey_bion.utils.classifier
-com.joffrey_bion.utils.dates
-com.joffrey_bion.utils.stats
-com.joffrey_bion.utils.xml
-com.joffrey_bion.utils.xml.serializers
+com.jbion.utils.classifier
+com.jbion.utils.dates
+com.jbion.utils.stats
+com.jbion.utils.xml
+com.jbion.utils.xml.serializers

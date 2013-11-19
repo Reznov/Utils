@@ -1,7 +1,15 @@
 package com.jbion.utils.strings;
 
+/**
+ * Constants corresponding to box drawings UTF-8 characters.
+ * 
+ * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>
+ */
 public class BoxDrawing {
 
+    /**
+     * System-dependent new line character.
+     */
     public static final String NEW_LINE = System.getProperty("line.separator");
 
     public static final char BOX_DRAWINGS_LIGHT_HORIZONTAL = Character.toChars(0x2500)[0];

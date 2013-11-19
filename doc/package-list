@@ -1,5 +1,6 @@
 com.jbion.utils.classification
 com.jbion.utils.dates
+com.jbion.utils.extractor
 com.jbion.utils.paths
 com.jbion.utils.stats
 com.jbion.utils.strings

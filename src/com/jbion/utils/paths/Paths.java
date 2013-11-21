@@ -65,7 +65,7 @@ public class Paths {
      *            The original URI.
      * @return The corrected URI.
      */
-    public static String fixURI(String uri) {
+    public static String fix(String uri) {
         // handle platform dependent strings
         String path = uri.replace(java.io.File.separatorChar, '/');
         // Windows fix

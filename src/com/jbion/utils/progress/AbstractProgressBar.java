@@ -102,7 +102,7 @@ public abstract class AbstractProgressBar {
      *            The number of elements counted as complete.
      */
     public void printProgress(int current) {
-        if (current == total || current % (total / length) == 0) {
+        if (current == total || total < length || current % (total / length) == 0) {
             updateProgress(current * length / total);
         }
     }

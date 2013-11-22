@@ -11,6 +11,8 @@ package com.jbion.utils.progress;
  */
 public class OneTimeProgressBar extends AbstractProgressBar {
 
+    private int currentLength;
+    
     /**
      * Creates a new {@link OneTimeProgressBar} with a default header.
      * 
@@ -24,6 +26,7 @@ public class OneTimeProgressBar extends AbstractProgressBar {
         super(total, length);
         setBarStyle(BarStyle.ASCII2);
         setHeaderStyle(HeaderStyle.LINE);
+        currentLength = 0;
     }
 
     @Override
@@ -34,8 +37,9 @@ public class OneTimeProgressBar extends AbstractProgressBar {
 
     @Override
     protected void updateProgress(int progress) {
-        if (progress > 0) {
+        while (currentLength < progress) {
             printStream.print(barStyle.done);
+            currentLength++;
         }
     }
 

@@ -12,9 +12,15 @@ import com.jbion.utils.drawing.grids.BoxChars;
 public enum BarStyle {
 
     /**
-     * A progress bar made out of ASCII characters only.
+     * A progress bar made out of ASCII characters only. Not adapted for the use with
+     * a header.
      */
     ASCII('[', '=', '>', ' ', ']'),
+    /**
+     * A progress bar made out of ASCII characters only. Decent in combination with
+     * {@link HeaderStyle#LINE}.
+     */
+    ASCII2('|', '=', '>', ' ', '|'),
     /**
      * The progress bar is built with block characters. It looks like a full and
      * growing rectangle.
@@ -23,7 +29,7 @@ public enum BarStyle {
             ' ', BlockChars.LEFT_ONE_EIGHTH_BLOCK),
     /**
      * A progress bar in the shape of a horizontal double line, using box drawing
-     * characters.
+     * characters. Nice in combination with {@link HeaderStyle#ANGLES}.
      */
     DOUBLE(BoxChars.BOX_DRAWINGS_VERTICAL_SINGLE_AND_RIGHT_DOUBLE,
             BoxChars.BOX_DRAWINGS_DOUBLE_HORIZONTAL,

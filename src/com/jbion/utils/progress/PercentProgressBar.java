@@ -11,8 +11,7 @@ import com.jbion.utils.drawing.Drawing;
 public class PercentProgressBar extends ReDrawnProgressBar {
 
     /**
-     * Creates a new {@link PercentProgressBar} with default {@link BarStyle#ASCII}
-     * style, printed on {@link System#out}.
+     * Creates a new {@link PercentProgressBar}.
      * 
      * @param total
      *            The number of elements this {@code ProgressBar} represents.
@@ -23,7 +22,7 @@ public class PercentProgressBar extends ReDrawnProgressBar {
      *            The way to redraw this progress bar.
      */
     public PercentProgressBar(int total, int length, ReDrawMode mode) {
-        super(mode, total, length);
+        super(total, length, mode);
     }
 
     @Override

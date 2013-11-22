@@ -42,18 +42,17 @@ public class ReDrawnProgressBar extends AbstractProgressBar {
     private ReDrawMode mode;
 
     /**
-     * Creates a new {@link PercentProgressBar} with default {@link BarStyle#ASCII}
-     * style, printed on {@link System#out}.
+     * Creates a new {@link ReDrawnProgressBar}.
      * 
-     * @param mode
-     *            The way to redraw this progress bar.
      * @param total
      *            The number of elements this {@code ProgressBar} represents.
      * @param length
      *            The number of characters used to display this
      *            {@code AbstractProgressBar} when it is complete.
+     * @param mode
+     *            The way to redraw this progress bar.
      */
-    public ReDrawnProgressBar(ReDrawMode mode, int total, int length) {
+    public ReDrawnProgressBar(int total, int length, ReDrawMode mode) {
         super(total, length);
         this.mode = mode;
     }

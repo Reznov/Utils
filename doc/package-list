@@ -1,6 +1,10 @@
 com.jbion.utils.classification
 com.jbion.utils.dates
+com.jbion.utils.drawing
+com.jbion.utils.drawing.blocks
+com.jbion.utils.drawing.grids
 com.jbion.utils.extractor
 com.jbion.utils.grids
 com.jbion.utils.paths
+com.jbion.utils.progress
 com.jbion.utils.stats

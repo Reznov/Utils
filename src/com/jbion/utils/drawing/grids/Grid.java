@@ -1,4 +1,4 @@
-package com.jbion.utils.grids;
+package com.jbion.utils.drawing.grids;
 
 /**
  * An interface used by {@link GridDrawer} to draw grids. Implement this interface to

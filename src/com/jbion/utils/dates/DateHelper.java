@@ -42,8 +42,8 @@ public class DateHelper {
         return format(milliseconds, DATE + DATE_TIME_SEP + TIME + MILLIS);
     }
 
-    public static void displayTimestamp(String name, long timestampNanos) {
-        System.out.println(name + ": " + toDateTimeMillis(timestampNanos / 1000000));
+    public static String displayTimestamp(long timestampNanos) {
+        return toDateTimeMillis(timestampNanos / 1000000);
     }
 
     /**

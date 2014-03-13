@@ -1,8 +1,8 @@
-package com.jbion.utils.progress;
+package com.jbion.utils.console.drawing.progress;
 
 import java.io.PrintStream;
 
-import com.jbion.utils.drawing.Drawing;
+import com.jbion.utils.console.drawing.Drawing;
 
 /**
  * A base class to build a console progress bar. The bar may be displayed via any

@@ -1,6 +1,6 @@
-package com.jbion.utils.progress;
+package com.jbion.utils.console.drawing.progress;
 
-import com.jbion.utils.drawing.Drawing;
+import com.jbion.utils.console.drawing.Drawing;
 
 /**
  * A progress bar that is redrawn at each update. It does not need a header to show

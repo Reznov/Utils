@@ -1,7 +1,7 @@
-package com.jbion.utils.progress;
+package com.jbion.utils.console.drawing.progress;
 
-import com.jbion.utils.drawing.blocks.BlockChars;
-import com.jbion.utils.drawing.grids.BoxChars;
+import com.jbion.utils.console.drawing.blocks.BlockChars;
+import com.jbion.utils.console.drawing.grids.BoxChars;
 
 /**
  * An enum representing the different possible styles for a

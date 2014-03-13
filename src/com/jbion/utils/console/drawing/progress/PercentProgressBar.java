@@ -1,6 +1,6 @@
-package com.jbion.utils.progress;
+package com.jbion.utils.console.drawing.progress;
 
-import com.jbion.utils.drawing.Drawing;
+import com.jbion.utils.console.drawing.Drawing;
 
 /**
  * A extended version of {@link ReDrawnProgressBar} that includes a percentage

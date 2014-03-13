@@ -1,8 +1,8 @@
 package com.jbion.utils.grids;
 
-import com.jbion.utils.drawing.grids.Grid;
-import com.jbion.utils.drawing.grids.GridDrawer;
-import com.jbion.utils.drawing.grids.GridDrawer.BorderType;
+import com.jbion.utils.console.drawing.grids.Grid;
+import com.jbion.utils.console.drawing.grids.GridDrawer;
+import com.jbion.utils.console.drawing.grids.GridDrawer.BorderType;
 
 public class GridDrawerTest {
 

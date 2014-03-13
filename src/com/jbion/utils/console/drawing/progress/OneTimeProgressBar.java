@@ -1,4 +1,4 @@
-package com.jbion.utils.progress;
+package com.jbion.utils.console.drawing.progress;
 
 /**
  * A progress bar that does not need to be erased by backspaces and does not create

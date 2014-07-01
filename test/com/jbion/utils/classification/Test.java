@@ -8,10 +8,10 @@ public class Test {
     private static final String CAT = "cat";
 
     public static void main(String[] args) {
-        ArrayList<String> classes = new ArrayList<>();
+        final ArrayList<String> classes = new ArrayList<>();
         classes.add(CAT);
         classes.add(DOG);
-        ConfusionMatrix<String> cm = new ConfusionMatrix<>(classes);
+        final ConfusionMatrix<String> cm = new ConfusionMatrix<>(classes);
         cm.add(DOG, DOG);
         cm.add(DOG, DOG);
         cm.add(DOG, DOG);
@@ -40,8 +40,8 @@ public class Test {
         System.out.println("Precision dog: " + cm.getPrecision(DOG));
         System.out.println("F-Measure dog: " + cm.getFMeasure(DOG));
         System.out.println("Overall accuracy: " + cm.getCorrectRate());
-        System.out.println("4/7 = " + 4.0/7.0);
-        System.out.println("4/9 = " + 4.0/9.0);
+        System.out.println("4/7 = " + 4.0 / 7.0);
+        System.out.println("4/9 = " + 4.0 / 9.0);
         System.out.println(cm);
     }
 

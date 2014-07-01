@@ -7,8 +7,6 @@ import com.jbion.utils.console.drawing.Drawing;
 /**
  * A base class to build a console progress bar. The bar may be displayed via any
  * {@link PrintStream}, using the standard output {@link System#out} by default.
- * 
- * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>
  */
 public abstract class AbstractProgressBar {
 
@@ -29,7 +27,7 @@ public abstract class AbstractProgressBar {
 
     /**
      * Creates a new {@link AbstractProgressBar}.
-     * 
+     *
      * @param total
      *            The number of elements this {@code AbstractProgressBar} represents.
      * @param length
@@ -97,7 +95,7 @@ public abstract class AbstractProgressBar {
 
     /**
      * Prints the specified progress in this bar.
-     * 
+     *
      * @param current
      *            The number of elements counted as complete.
      */
@@ -114,7 +112,7 @@ public abstract class AbstractProgressBar {
 
     /**
      * Called to update the bar with the specified progress when there is a change.
-     * 
+     *
      * @param progress
      *            The number of blocks of the bar that represents the progress done.
      */

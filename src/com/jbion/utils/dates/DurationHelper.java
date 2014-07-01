@@ -7,7 +7,7 @@ public class DurationHelper {
     private static long getZero() {
         try {
             return DateHelper.timestampStrToMillis("1970-01-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
-        } catch (ParseException e) {
+        } catch (final ParseException e) {
             System.err.println("Internal error.");
             return -1;
         }
@@ -26,8 +26,7 @@ public class DurationHelper {
     }
 
     public static long strToMillis(String duration, String timeFormat) throws ParseException {
-        long zero = getZero();
-        return DateHelper.timestampStrToMillis("1970-01-01 " + duration, "yyyy-MM-dd "
-                + timeFormat) - zero;
+        final long zero = getZero();
+        return DateHelper.timestampStrToMillis("1970-01-01 " + duration, "yyyy-MM-dd " + timeFormat) - zero;
     }
 }

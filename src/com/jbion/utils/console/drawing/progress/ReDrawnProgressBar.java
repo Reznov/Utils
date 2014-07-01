@@ -16,8 +16,6 @@ import com.jbion.utils.console.drawing.Drawing;
  * new line. Useful to redraw the bar even in Eclipse console, where
  * {@link ReDrawMode#ERASE} mode can't be used.</li>
  * </ul>
- * 
- * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>
  */
 public class ReDrawnProgressBar extends AbstractProgressBar {
 
@@ -39,11 +37,11 @@ public class ReDrawnProgressBar extends AbstractProgressBar {
         NEW_LINE;
     }
 
-    private ReDrawMode mode;
+    private final ReDrawMode mode;
 
     /**
      * Creates a new {@link ReDrawnProgressBar}.
-     * 
+     *
      * @param total
      *            The number of elements this {@code ProgressBar} represents.
      * @param length
@@ -59,14 +57,14 @@ public class ReDrawnProgressBar extends AbstractProgressBar {
 
     /**
      * Prints the whole bar representing the specified progress.
-     * 
+     *
      * @param progress
      *            The number of blocks of the bar that represents the progress done.
      */
     protected void printWholeBar(int progress) {
         printStream.print(barStyle.left);
         for (int i = 0; i < length; i++) {
-            if (i < progress || (progress == length && i == progress)) {
+            if (i < progress || progress == length && i == progress) {
                 printStream.print(barStyle.done);
             } else if (i == progress) {
                 printStream.print(barStyle.curr);

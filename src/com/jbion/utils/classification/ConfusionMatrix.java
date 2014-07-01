@@ -5,8 +5,8 @@ import java.util.List;
 
 public class ConfusionMatrix<T> {
 
-    private ArrayList<T> classes;
-    private int[][] matrix;
+    private final ArrayList<T> classes;
+    private final int[][] matrix;
     private int total;
     private int totalCorrect;
 
@@ -21,7 +21,7 @@ public class ConfusionMatrix<T> {
     }
 
     private int getIndex(T clazz) {
-        int i = classes.indexOf(clazz);
+        final int i = classes.indexOf(clazz);
         if (i == -1) {
             throw new RuntimeException("Unkown class '" + clazz + "'.");
         }
@@ -29,8 +29,8 @@ public class ConfusionMatrix<T> {
     }
 
     public void add(T trueClass, T classifiedAs) {
-        int t = getIndex(trueClass);
-        int c = getIndex(classifiedAs);
+        final int t = getIndex(trueClass);
+        final int c = getIndex(classifiedAs);
         matrix[t][c]++;
         total++;
         if (t == c) {
@@ -39,8 +39,8 @@ public class ConfusionMatrix<T> {
     }
 
     public void remove(T trueClass, T classifiedAs) {
-        int t = getIndex(trueClass);
-        int c = getIndex(classifiedAs);
+        final int t = getIndex(trueClass);
+        final int c = getIndex(classifiedAs);
         matrix[t][c]--;
         total++;
         if (t == c) {
@@ -54,7 +54,7 @@ public class ConfusionMatrix<T> {
 
     /**
      * Returns the total number of instances.
-     * 
+     *
      * @return the total number of instances.
      */
     public int getTotal() {
@@ -63,7 +63,7 @@ public class ConfusionMatrix<T> {
 
     /**
      * Returns the number of correctly classified instances.
-     * 
+     *
      * @return the number of correctly classified instances.
      */
     public int getTotalCorrect() {
@@ -72,7 +72,7 @@ public class ConfusionMatrix<T> {
 
     /**
      * Returns the number of incorrectly classified instances.
-     * 
+     *
      * @return the number of incorrectly classified instances.
      */
     public int getTotalIncorrect() {
@@ -81,7 +81,7 @@ public class ConfusionMatrix<T> {
 
     /**
      * Returns the rate of correctly classified instances.
-     * 
+     *
      * @return the rate of correctly classified instances.
      */
     public double getCorrectRate() {
@@ -90,7 +90,7 @@ public class ConfusionMatrix<T> {
 
     /**
      * Returns the rate of incorrectly classified instances.
-     * 
+     *
      * @return the rate of incorrectly classified instances.
      */
     public double getIncorrectRate() {
@@ -101,7 +101,7 @@ public class ConfusionMatrix<T> {
      * Return the recall for the specified class. It corresponds to the probability
      * that a (randomly selected) actual instance of the specified class is
      * classified as such.
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @return the recall for the specified class.
@@ -114,7 +114,7 @@ public class ConfusionMatrix<T> {
      * Return the precision for the specified class. It corresponds to the
      * probability that a (randomly selected) instance classified as the specified
      * class is actually of this class.
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @return the recall for the specified class.
@@ -127,7 +127,7 @@ public class ConfusionMatrix<T> {
      * Return the precision for the specified class. It corresponds to the
      * probability that a (randomly selected) instance that is not of the specified
      * class is classified as a different class than the specified class.
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @return the recall for the specified class.
@@ -140,7 +140,7 @@ public class ConfusionMatrix<T> {
      * Returns the accuracy for the specified class. It corresponds to the
      * probability that a randomly selected instance will be correctly classified
      * (true positive or true negative).
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @return the accuracy for the specified class.
@@ -152,7 +152,7 @@ public class ConfusionMatrix<T> {
     /**
      * Returns the F-Measure for the specified class, with equal importance given to
      * recall and precision.
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @return the F-Measure for the specified class.
@@ -164,7 +164,7 @@ public class ConfusionMatrix<T> {
 
     /**
      * Returns the F-Measure for the specified class.
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @param beta
@@ -172,16 +172,16 @@ public class ConfusionMatrix<T> {
      * @return the F-Measure for the specified class.
      */
     public double getFMeasure(T clazz, double beta) {
-        double precision = getPrecision(clazz);
-        double recall = getRecall(clazz);
-        double beta2 = beta * beta;
+        final double precision = getPrecision(clazz);
+        final double recall = getRecall(clazz);
+        final double beta2 = beta * beta;
         return (1 + beta2) * precision * recall / (beta2 * precision + recall);
     }
 
     /**
      * Returns the number of instances correctly classified as the specified class.
      * They are actually of this class.
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @return the number of instances correctly classified as the specified class.
@@ -193,7 +193,7 @@ public class ConfusionMatrix<T> {
     /**
      * Returns the number of instances incorrectly classified as the specified class.
      * They are actually not of this class.
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @return the number of instances incorrectly classified as the specified class.
@@ -205,7 +205,7 @@ public class ConfusionMatrix<T> {
     /**
      * Returns the number of instances that are not classified as the specified
      * class, and are not of this class in reality.
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @return Returns the number of instances that are not classified as the
@@ -218,7 +218,7 @@ public class ConfusionMatrix<T> {
     /**
      * Returns the number of instances that are (incorrectly) not classified as the
      * specified class, but are of this class in reality.
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @return Returns the number of instances that are (incorrectly) not classified
@@ -230,7 +230,7 @@ public class ConfusionMatrix<T> {
 
     /**
      * Returns the number of actual instances of the specified class in reality.
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @return the number of actual instances of the specified class in reality.
@@ -241,7 +241,7 @@ public class ConfusionMatrix<T> {
 
     /**
      * Returns the total number of instances classified as the specified class.
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @return the total number of instances classified as the specified class.
@@ -253,7 +253,7 @@ public class ConfusionMatrix<T> {
     /**
      * Returns the number of instances that are not of the specified class in
      * reality.
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @return the number of instances that are not of the specified class in
@@ -265,7 +265,7 @@ public class ConfusionMatrix<T> {
 
     /**
      * Returns the number of instances not classified as the specified class.
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @return the number of instances not classified as the specified class.
@@ -276,7 +276,7 @@ public class ConfusionMatrix<T> {
 
     /**
      * Counts the number of instances corresponding to the given filters.
-     * 
+     *
      * @param clazz
      *            The considered class.
      * @param truth
@@ -288,7 +288,7 @@ public class ConfusionMatrix<T> {
      * @return the count.
      */
     private int get(T clazz, Filter truth, Filter classifiedAs) {
-        int index = getIndex(clazz);
+        final int index = getIndex(clazz);
         int count = 0;
         for (int t = 0; t < classes.size(); t++) {
             for (int c = 0; c < classes.size(); c++) {
@@ -325,7 +325,7 @@ public class ConfusionMatrix<T> {
 
         /**
          * Returns whether the given instance should be counted.
-         * 
+         *
          * @param classIndex
          *            The index of the class to compare the other index to.
          * @param comparedIndex
@@ -337,8 +337,8 @@ public class ConfusionMatrix<T> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        String newLine = System.getProperty("line.separator");
+        final StringBuilder sb = new StringBuilder();
+        final String newLine = System.getProperty("line.separator");
         for (int i = 0; i < classes.size(); i++) {
             sb.append((char) ('a' + i));
             sb.append("\t");

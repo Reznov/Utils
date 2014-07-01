@@ -5,14 +5,12 @@ import com.jbion.utils.console.drawing.Drawing;
 /**
  * A extended version of {@link ReDrawnProgressBar} that includes a percentage
  * display.
- * 
- * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>
  */
 public class PercentProgressBar extends ReDrawnProgressBar {
 
     /**
      * Creates a new {@link PercentProgressBar}.
-     * 
+     *
      * @param total
      *            The number of elements this {@code ProgressBar} represents.
      * @param length

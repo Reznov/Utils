@@ -9,9 +9,9 @@ package com.jbion.utils.stats;
  * double values through the methods {@link #add(double)} and {@link #remove(double)}
  * , and then the statistics methods can be called.
  * </p>
- * 
+ *
  * <pre>
- * {@code 
+ * {@code
  * FlowStats stats = new FlowStats();
  * stats.add(1.0);
  * stats.add(4.0);
@@ -21,8 +21,6 @@ package com.jbion.utils.stats;
  * stats.mean(); // returns 2.5
  * }
  * </pre>
- * 
- * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey BION</a>
  */
 public class FlowStats implements Cloneable {
 
@@ -48,20 +46,20 @@ public class FlowStats implements Cloneable {
     /**
      * Returns a copy of this {@code FlowStats} object. The changes made to this
      * object after a call to {@link #getCopy()} do not affect the returned object.
-     * 
+     *
      * @return A copy of this object.
      */
     public FlowStats getCopy() {
         try {
             return (FlowStats) clone();
-        } catch (CloneNotSupportedException e) {
+        } catch (final CloneNotSupportedException e) {
             throw new RuntimeException("Internal Error: this cloning problem cannot happen");
         }
     }
 
     /**
      * Return the number of values that were put in this series.
-     * 
+     *
      * @return the number of values that were put in this series.
      */
     public int getNbValues() {
@@ -70,7 +68,7 @@ public class FlowStats implements Cloneable {
 
     /**
      * Return the total weight of the values that were put in this series.
-     * 
+     *
      * @return Return the total weight of the values that were put in this series.
      */
     public double getTotalWeight() {
@@ -89,7 +87,7 @@ public class FlowStats implements Cloneable {
 
     /**
      * Adds a value to this series, with a weight of 1.
-     * 
+     *
      * @param value
      *            The value to be added.
      * @see #add(double, double)
@@ -101,7 +99,7 @@ public class FlowStats implements Cloneable {
     /**
      * Removes a value from this series, that was previously added via
      * {@link #add(double)} (with a weight of 1).
-     * 
+     *
      * @param value
      *            The value to be removed.
      * @see #remove(double, double)
@@ -112,7 +110,7 @@ public class FlowStats implements Cloneable {
 
     /**
      * Adds a value to this series.
-     * 
+     *
      * @param value
      *            The value to be added.
      * @param weight
@@ -128,7 +126,7 @@ public class FlowStats implements Cloneable {
 
     /**
      * Removes a value from this series.
-     * 
+     *
      * @param value
      *            The value to be removed.
      * @param weight
@@ -144,7 +142,7 @@ public class FlowStats implements Cloneable {
 
     /**
      * Returns the mean of this series of values.
-     * 
+     *
      * @return the mean of this series of values.
      */
     public double mean() {
@@ -156,34 +154,34 @@ public class FlowStats implements Cloneable {
 
     /**
      * Returns the variance of this series of values.
-     * 
+     *
      * @return the variance of this series of values.
      */
     public double variance() {
         if (totalWeight == 0) {
             return 0;
         }
-        double mean = mean();
+        final double mean = mean();
         return weightedSquaresSum / totalWeight - mean * mean;
     }
 
     /**
      * Returns the standard deviation of this series of values.
-     * 
+     *
      * @return the standard deviation of this series of values.
      */
     public double standardDeviation() {
-        double var = variance();
+        final double var = variance();
         return Math.sqrt(var);
     }
 
     /**
      * Returns the coefficient of variation of this series of values.
-     * 
+     *
      * @return the coefficient of variation of this series of values.
      */
     public double coeffOfVariation() {
-        double mean = mean();
+        final double mean = mean();
         if (mean == 0) {
             if (totalWeight == 0) {
                 return 0;

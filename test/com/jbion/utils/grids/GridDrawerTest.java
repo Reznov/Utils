@@ -31,20 +31,20 @@ public class GridDrawerTest {
     }
 
     public static void main(String[] args) {
-        MyGrid g = new MyGrid();
-        GridDrawer gd = new GridDrawer();
+        final MyGrid g = new MyGrid();
+        final GridDrawer gd = new GridDrawer();
         System.out.println("Default borders");
         System.out.println(gd.drawGrid(g));
-        for (BorderType bt : BorderType.values()) {
+        for (final BorderType bt : BorderType.values()) {
             gd.setBorderType(bt);
             System.out.println("Borders: " + bt);
             System.out.println(gd.drawGrid(g));
-            for (BorderType bt2 : BorderType.values()) {
+            for (final BorderType bt2 : BorderType.values()) {
                 try {
                     gd.setBorderType(bt, bt2);
                     System.out.println("Borders: " + bt + "/" + bt2);
                     System.out.println(gd.drawGrid(g));
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     System.err.println("Exception: " + e.getMessage());
                 }
             }

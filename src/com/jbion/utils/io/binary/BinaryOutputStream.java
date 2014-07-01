@@ -18,17 +18,16 @@ public class BinaryOutputStream extends BufferedOutputStream {
 
     /**
      * Writes the given binary string to a buffer that will be written byte by byte.
-     * 
+     *
      * @param binaryString
      *            A binary {@code String}. This {@code String} must contain only the
      *            characters '0' or '1'.
      * @throws IOException
-     *             If any I/O error occurs.
+     *             if an I/O error occurs
      */
     public void write(String binaryString) throws IOException {
         if (!binaryString.matches("{0|1}*")) {
-            throw new IllegalArgumentException("The input string '" + binaryString
-                    + "' must contain only 0s and 1s.");
+            throw new IllegalArgumentException("The input string '" + binaryString + "' must contain only 0s and 1s.");
         }
         buffer += binaryString;
         // write the excess byte by byte
@@ -40,11 +39,11 @@ public class BinaryOutputStream extends BufferedOutputStream {
 
     /**
      * Writes the specified bit to this stream.
-     * 
+     *
      * @param bit
-     *            The bit to write: 0 or 1
+     *            the bit to write: 0 or 1
      * @throws IOException
-     *             If any I/O error occurs.
+     *             if an I/O error occurs
      */
     public void writeBit(int bit) throws IOException {
         if (bit == 1) {
@@ -58,11 +57,11 @@ public class BinaryOutputStream extends BufferedOutputStream {
 
     /**
      * Writes the specified bit to this stream.
-     * 
+     *
      * @param bit
-     *            The bit to write: {@code true} for 1, {@code false} for 0
+     *            the bit to write: {@code true} for 1, {@code false} for 0
      * @throws IOException
-     *             If any I/O error occurs.
+     *             if an I/O error occurs
      */
     public void writeBit(boolean bit) throws IOException {
         if (bit) {
@@ -75,11 +74,11 @@ public class BinaryOutputStream extends BufferedOutputStream {
     /**
      * Writes the given long to this stream, with leading zeros to reach
      * {@link Long#SIZE}.
-     * 
+     *
      * @param value
      *            The value to write.
      * @throws IOException
-     *             If any I/O error occurs.
+     *             if an I/O error occurs
      */
     public void writeLong(long value) throws IOException {
         writeValue(value, Long.SIZE);
@@ -88,11 +87,11 @@ public class BinaryOutputStream extends BufferedOutputStream {
     /**
      * Writes the given integer to this stream, with leading zeros to reach
      * {@link Integer#SIZE}.
-     * 
+     *
      * @param value
      *            The value to write.
      * @throws IOException
-     *             If any I/O error occurs.
+     *             if an I/O error occurs
      */
     public void writeInteger(int value) throws IOException {
         writeValue(value, Integer.SIZE);
@@ -101,11 +100,11 @@ public class BinaryOutputStream extends BufferedOutputStream {
     /**
      * Writes the given character's code to this stream, with leading zeros to reach
      * {@link Character#SIZE}.
-     * 
+     *
      * @param value
      *            The value to write.
      * @throws IOException
-     *             If any I/O error occurs.
+     *             if an I/O error occurs
      */
     public void writeCharacter(char value) throws IOException {
         writeValue(value, Character.SIZE);
@@ -114,27 +113,27 @@ public class BinaryOutputStream extends BufferedOutputStream {
     /**
      * Writes the given value to this stream, with leading zeros to reach
      * {@code size}.
-     * 
+     *
      * @param value
      *            The value to write to this stream.
      * @param size
      *            The number of bits to use to write the value.
      * @throws IOException
-     *             If any I/O error occurs.
+     *             if an I/O error occurs
      */
     private void writeValue(long value, int size) throws IOException {
-        String binStr = BinHelper.addLeadingZeros(Long.toBinaryString(value), size);
+        final String binStr = BinHelper.addLeadingZeros(Long.toBinaryString(value), size);
         write(binStr);
     }
 
     /**
      * Writes the given int value to this stream, preceded by 5 bits indicating the
      * number of bits used to write it.
-     * 
+     *
      * @param value
      *            The value to write.
      * @throws IOException
-     *             If any I/O error occurs.
+     *             if an I/O error occurs
      */
     public void writeIntegerWithLength(int value) throws IOException {
         writeWithLength(value, 5);
@@ -143,11 +142,11 @@ public class BinaryOutputStream extends BufferedOutputStream {
     /**
      * Writes the given long value to this stream, preceded by 6 bits indicating the
      * number of bits used to write it.
-     * 
+     *
      * @param value
-     *            The value to write.
+     *            the value to write
      * @throws IOException
-     *             If any I/O error occurs.
+     *             if an I/O error occurs
      */
     public void writeLongWithLength(long value) throws IOException {
         writeWithLength(value, 6);
@@ -157,15 +156,17 @@ public class BinaryOutputStream extends BufferedOutputStream {
      * Writes the given {@code value} to this stream, preceded by
      * {@code magnitudeLength} bits indicating the number of bits used to write
      * {@code value}.
-     * 
+     *
      * @param value
-     *            The value to write to this stream
+     *            the value to write to this stream
      * @param magnitudeLength
-     *            The number of bits used to indicate the number of bits used for
+     *            the number of bits used to indicate the number of bits used for
      *            {@code value} (beware of the number-of-bit-ception!)
+     * @throws IOException
+     *             if an I/O error occurs
      */
     private void writeWithLength(long value, int magnitudeLength) throws IOException {
-        String binStr = Long.toBinaryString(value);
+        final String binStr = Long.toBinaryString(value);
         String magnitudeStr = Integer.toBinaryString(binStr.length() - 1);
         magnitudeStr = BinHelper.addLeadingZeros(magnitudeStr, magnitudeLength);
         write(magnitudeStr);
@@ -174,16 +175,20 @@ public class BinaryOutputStream extends BufferedOutputStream {
 
     /**
      * Only call this method from {@link #write(String)}.
+     *
+     * @param byteStr
+     *            a 8-char long binary String to write
+     * @throws IOException
+     *             if an I/O error occurs
      */
     private void writeByte(String byteStr) throws IOException {
         if (byteStr.length() != 8) {
-            throw new IllegalArgumentException("Wrong length (" + byteStr.length()
-                    + ") for a byte, 8 expected");
+            throw new IllegalArgumentException("Wrong length (" + byteStr.length() + ") for a byte, 8 expected");
         }
         try {
-            int b = Integer.parseInt(byteStr, 2);
+            final int b = Integer.parseInt(byteStr, 2);
             write(b); // TODO test with an integer > 255
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             throw new IllegalArgumentException("Binary string expected, got '" + byteStr + "'");
         }
 
@@ -199,16 +204,22 @@ public class BinaryOutputStream extends BufferedOutputStream {
                 writeByte(completeByte(buffer));
             }
             super.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
 
     /**
      * Completes a binary {@code String} shorter than 8 bits to a full byte.
+     *
+     * @param bin
+     *            a {@code String} containing only characters '0' and '1', and
+     *            shorter than 8 chars
+     * @return the input {@code String} plus as many trailing 0s as needed to
+     *         complete a byte
      */
     private static String completeByte(String bin) {
-        int length = bin.length();
+        final int length = bin.length();
         if (length > 8) {
             throw new IllegalArgumentException("The string must be shorter than a byte.");
         }

@@ -8,8 +8,6 @@ import java.util.Locale;
 
 /**
  * A helper class to convert timestamps to formatted readable dates.
- * 
- * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey BION</a>
  */
 public class DateHelper {
 
@@ -48,7 +46,7 @@ public class DateHelper {
 
     /**
      * Parses the specified timestamp and returns its milliseconds value.
-     * 
+     *
      * @param timestamp
      *            The timestamp {@code String} to parse.
      * @param formatPattern
@@ -57,23 +55,22 @@ public class DateHelper {
      * @throws ParseException
      *             If the timestamp does not respect the specified format.
      */
-    public static long timestampStrToMillis(String timestamp, String formatPattern)
-            throws ParseException {
-        DateFormat df = new SimpleDateFormat(formatPattern);
+    public static long timestampStrToMillis(String timestamp, String formatPattern) throws ParseException {
+        final DateFormat df = new SimpleDateFormat(formatPattern);
         df.setLenient(false);
         Date date;
         try {
             date = df.parse(timestamp);
-        } catch (ParseException e) {
-            throw new ParseException("Cannot parse timestamp '" + timestamp
-                    + "', expected format: " + formatPattern, e.getErrorOffset());
+        } catch (final ParseException e) {
+            throw new ParseException("Cannot parse timestamp '" + timestamp + "', expected format: " + formatPattern,
+                    e.getErrorOffset());
         }
         return date.getTime();
     }
-    
+
     /**
      * Parses the specified timestamp and returns its nanoseconds value.
-     * 
+     *
      * @param timestamp
      *            The timestamp {@code String} to parse.
      * @param formatPattern
@@ -82,8 +79,7 @@ public class DateHelper {
      * @throws ParseException
      *             If the timestamp does not respect the specified format.
      */
-    public static long timestampStrToNanos(String timestamp, String formatPattern)
-            throws ParseException {
+    public static long timestampStrToNanos(String timestamp, String formatPattern) throws ParseException {
         return timestampStrToMillis(timestamp, formatPattern) * 1000000;
     }
 }

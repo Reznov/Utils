@@ -10,8 +10,6 @@ import java.io.Reader;
 /**
  * A reader that reads and skips the BOM (Byte Order Mark), using it to determine the
  * encoding of the file.
- * 
- * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>
  */
 public class UnicodeReader extends Reader {
 
@@ -22,7 +20,7 @@ public class UnicodeReader extends Reader {
     /**
      * Creates a {@code UnicodeReader} for the specified file. Uses system default
      * encoding if BOM is not found.
-     * 
+     *
      * @param filename
      *            Input file.
      * @throws IOException
@@ -34,7 +32,7 @@ public class UnicodeReader extends Reader {
 
     /**
      * Creates a {@code UnicodeReader} for the specified file.
-     * 
+     *
      * @param filename
      *            Input file.
      * @param defaultEncoding
@@ -45,26 +43,24 @@ public class UnicodeReader extends Reader {
      */
     public UnicodeReader(String filename, String defaultEncoding) throws IOException {
         // Read ahead BOM_SIZE bytes to fetch any possible BOM
-        byte bom[] = new byte[BOM_SIZE];
-        PushbackInputStream pbis = new PushbackInputStream(new FileInputStream(filename), BOM_SIZE);
-        int n = pbis.read(bom, 0, bom.length);
+        final byte bom[] = new byte[BOM_SIZE];
+        final PushbackInputStream pbis = new PushbackInputStream(new FileInputStream(filename), BOM_SIZE);
+        final int n = pbis.read(bom, 0, bom.length);
         int unread;
         // Check for BOM
-        if ((bom[0] == (byte) 0xEF) && (bom[1] == (byte) 0xBB) && (bom[2] == (byte) 0xBF)) {
+        if (bom[0] == (byte) 0xEF && bom[1] == (byte) 0xBB && bom[2] == (byte) 0xBF) {
             encoding = "UTF-8";
             unread = n - 3;
-        } else if ((bom[0] == (byte) 0xFE) && (bom[1] == (byte) 0xFF)) {
+        } else if (bom[0] == (byte) 0xFE && bom[1] == (byte) 0xFF) {
             encoding = "UTF-16BE";
             unread = n - 2;
-        } else if ((bom[0] == (byte) 0xFF) && (bom[1] == (byte) 0xFE)) {
+        } else if (bom[0] == (byte) 0xFF && bom[1] == (byte) 0xFE) {
             encoding = "UTF-16LE";
             unread = n - 2;
-        } else if ((bom[0] == (byte) 0x00) && (bom[1] == (byte) 0x00) && (bom[2] == (byte) 0xFE)
-                && (bom[3] == (byte) 0xFF)) {
+        } else if (bom[0] == (byte) 0x00 && bom[1] == (byte) 0x00 && bom[2] == (byte) 0xFE && bom[3] == (byte) 0xFF) {
             encoding = "UTF-32BE";
             unread = n - 4;
-        } else if ((bom[0] == (byte) 0xFF) && (bom[1] == (byte) 0xFE) && (bom[2] == (byte) 0x00)
-                && (bom[3] == (byte) 0x00)) {
+        } else if (bom[0] == (byte) 0xFF && bom[1] == (byte) 0xFE && bom[2] == (byte) 0x00 && bom[3] == (byte) 0x00) {
             encoding = "UTF-32LE";
             unread = n - 4;
         } else {
@@ -73,13 +69,13 @@ public class UnicodeReader extends Reader {
         }
         // Unread bytes if necessary and skip BOM
         if (unread > 0) {
-            pbis.unread(bom, (n - unread), unread);
+            pbis.unread(bom, n - unread, unread);
         } else if (unread < -1) {
             pbis.unread(bom, 0, 0);
         }
         // Use given encoding.
         if (encoding == null) {
-            InputStreamReader isr = new InputStreamReader(pbis);
+            final InputStreamReader isr = new InputStreamReader(pbis);
             reader = new BufferedReader(isr);
             encoding = isr.getEncoding();
         } else {
@@ -93,7 +89,7 @@ public class UnicodeReader extends Reader {
      * any, otherwise it is the given default encoding or system default, as
      * specified by {@link #UnicodeReader(String)} or
      * {@link #UnicodeReader(String, String)}.
-     * 
+     *
      * @return The encoding used to read the file.
      */
     public String getEncoding() {

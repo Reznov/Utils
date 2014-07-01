@@ -7,14 +7,14 @@ import java.util.LinkedList;
  * {@link Double} value. It can be used in any problem where some levels are
  * separated by numeric thresholds, and where the first level starts at value 0 and
  * the last has no upper bound.
- * 
- * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey BION</a>
- * @param <Level> The type (java class) of the classification classes.
+ *
+ * @param <Level>
+ *            The type (java class) of the classification classes.
  */
 public class Classifier<Level> {
 
-    private LinkedList<CutPoint> cutPoints;
-    private Level[] levels;
+    private final LinkedList<CutPoint> cutPoints;
+    private final Level[] levels;
 
     /**
      * A little helper class to specify a level and its upper limit.
@@ -34,7 +34,7 @@ public class Classifier<Level> {
     /**
      * Creates a set of cut points that separate different levels by different
      * thresholds.
-     * 
+     *
      * @param levels
      *            The different possible levels in this classifier.
      * @param thresholds
@@ -58,15 +58,16 @@ public class Classifier<Level> {
 
     /**
      * Determines the level corresponding to the specified value.
-     * 
+     *
      * @param value
      *            The value to convert into a level.
      * @return the level corresponding to the specified value.
      */
     public Level valueToLevel(double value) {
-        if (value < 0)
+        if (value < 0) {
             throw new IllegalArgumentException("The value must be positive");
-        for (CutPoint cutPoint : cutPoints) {
+        }
+        for (final CutPoint cutPoint : cutPoints) {
             if (value <= cutPoint.upperLimit) {
                 return cutPoint.level;
             }
@@ -76,7 +77,7 @@ public class Classifier<Level> {
 
     /**
      * Return the possible levels of classification.
-     * 
+     *
      * @return the possible levels of classification.
      */
     public Level[] getLevels() {

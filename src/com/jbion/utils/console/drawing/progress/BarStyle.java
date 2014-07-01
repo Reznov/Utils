@@ -6,8 +6,6 @@ import com.jbion.utils.console.drawing.grids.BoxChars;
 /**
  * An enum representing the different possible styles for a
  * {@link AbstractProgressBar}.
- * 
- * @author <a href="mailto:joffrey.bion@gmail.com">Joffrey Bion</a>
  */
 public enum BarStyle {
 
@@ -25,16 +23,14 @@ public enum BarStyle {
      * The progress bar is built with block characters. It looks like a full and
      * growing rectangle.
      */
-    BLOCK(BlockChars.RIGHT_ONE_EIGHTH_BLOCK, BlockChars.FULL_BLOCK, BlockChars.LEFT_HALF_BLOCK,
-            ' ', BlockChars.LEFT_ONE_EIGHTH_BLOCK),
-    /**
-     * A progress bar in the shape of a horizontal double line, using box drawing
-     * characters. Nice in combination with {@link HeaderStyle#ANGLES}.
-     */
-    DOUBLE(BoxChars.BOX_DRAWINGS_VERTICAL_SINGLE_AND_RIGHT_DOUBLE,
-            BoxChars.BOX_DRAWINGS_DOUBLE_HORIZONTAL,
-            BlockChars.BLACK_RIGHT_POINTING_SMALL_TRIANGLE, ' ',
-            BoxChars.BOX_DRAWINGS_VERTICAL_SINGLE_AND_LEFT_DOUBLE);
+    BLOCK(BlockChars.RIGHT_ONE_EIGHTH_BLOCK, BlockChars.FULL_BLOCK, BlockChars.LEFT_HALF_BLOCK, ' ',
+            BlockChars.LEFT_ONE_EIGHTH_BLOCK),
+            /**
+             * A progress bar in the shape of a horizontal double line, using box drawing
+             * characters. Nice in combination with {@link HeaderStyle#ANGLES}.
+             */
+            DOUBLE(BoxChars.BOX_DRAWINGS_VERTICAL_SINGLE_AND_RIGHT_DOUBLE, BoxChars.BOX_DRAWINGS_DOUBLE_HORIZONTAL,
+                    BlockChars.BLACK_RIGHT_POINTING_SMALL_TRIANGLE, ' ', BoxChars.BOX_DRAWINGS_VERTICAL_SINGLE_AND_LEFT_DOUBLE);
 
     /**
      * The {@code char} for the bar's left bound. It is located right under

@@ -1,6 +1,9 @@
 package com.jbion.utils.io.binary;
 
 import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -11,6 +14,7 @@ import java.io.InputStream;
  */
 public class BitInputStream extends BufferedInputStream {
 
+    private static final int BITS_PER_BYTE = 8;
     /**
      * The buffer of bits. Only the right-most bits (least significant) are used.
      */
@@ -19,6 +23,32 @@ public class BitInputStream extends BufferedInputStream {
      * Indicates how many bits of the buffer are currently used.
      */
     private int bufferLength = 0;
+
+    /**
+     * Creates a new {@link BitInputStream} reading from the specified file.
+     * 
+     * @param filename
+     *            the name of the file to read from
+     * @throws FileNotFoundException
+     *             if the file does not exist, is a directory rather than a regular
+     *             file, or for some other reason cannot be opened for reading.
+     */
+    public BitInputStream(String filename) throws FileNotFoundException {
+        this(new File(filename));
+    }
+
+    /**
+     * Creates a new {@link BitInputStream} reading from the specified file.
+     * 
+     * @param file
+     *            the file to read from
+     * @throws FileNotFoundException
+     *             if the file does not exist, is a directory rather than a regular
+     *             file, or for some other reason cannot be opened for reading.
+     */
+    public BitInputStream(File file) throws FileNotFoundException {
+        super(new FileInputStream(file));
+    }
 
     /**
      * Creates a new {@link BitInputStream} wrapping the specified
@@ -42,6 +72,11 @@ public class BitInputStream extends BufferedInputStream {
      */
     public BitInputStream(InputStream in, int size) {
         super(in, size);
+    }
+
+    @Override
+    public synchronized int available() throws IOException {
+        return bufferLength / 8 + super.available();
     }
 
     /**
@@ -76,6 +111,62 @@ public class BitInputStream extends BufferedInputStream {
     }
 
     /**
+     * Reads up to {@link Long#SIZE} bits as a long value.
+     * 
+     * @param length
+     *            the number of bits to read. Must not exceed {@link Long#SIZE}.
+     * @param failOnEOF
+     *            indicates how to behave in case of premature end of input. If
+     *            {@code true}, this method throws {@link IllegalStateException} if
+     *            there's not enough bits to read. If {@code false}, this methods
+     *            returns -1 in such a case. The problem is that there is no way to
+     *            tell if -1 is returned because it is the value that was read or a
+     *            premature end of input.
+     * @return the long value of the read bits, or -1 if the end of input is reached
+     *         (only if {@code failOnEOF} is {@code false})
+     * @throws IllegalStateException
+     *             if the end of stream is reached before the specified number of
+     *             bits could be read (only if {@code failOnEOF} is {@code true})
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    public synchronized long readBits(int length, boolean failOnEOF) throws IOException {
+        if (length > Long.SIZE) {
+            throw new IllegalArgumentException("can't read more bits than the size of a long");
+        }
+        while (bufferLength < length) {
+            int octet = super.read();
+            if (octet == -1) {
+                if (failOnEOF) {
+                    throw new IllegalStateException("premature end of input, cannot read the requested number of bits");
+                } else {
+                    return -1;
+                }
+            }
+            buffer = (buffer << BITS_PER_BYTE) + octet;
+            bufferLength += BITS_PER_BYTE;
+        }
+        return pollBitsFromBuffer(length);
+    }
+
+    /**
+     * Reads up to {@link Long#SIZE} bits as a long value.
+     * 
+     * @param length
+     *            the number of bits to read. Must not exceed {@link Long#SIZE}, nor
+     *            the number of available bits in this stream.
+     * @return the long value of the read bits
+     * @throws IllegalStateException
+     *             if the end of stream is reached before the specified number of
+     *             bits could be read
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    public synchronized long readBits(int length) throws IOException {
+        return readBits(length, true);
+    }
+
+    /**
      * Reads the next bit from this stream.
      *
      * @return 1 or 0 depending on the read bit, or -1 if the end of stream was
@@ -91,111 +182,9 @@ public class BitInputStream extends BufferedInputStream {
                 return -1;
             }
             buffer = octet;
-            bufferLength = 8;
+            bufferLength = BITS_PER_BYTE;
         }
         return (int) pollBitsFromBuffer(1);
-    }
-
-    /**
-     * Reads up to {@link Long#SIZE} bits as a long value.
-     * 
-     * @param length
-     *            the number of bits to read. Must not exceed the number of remaining
-     *            bits in this stream.
-     * @return the long value of the read bits
-     * @throws IllegalStateException
-     *             if the end of stream is reached before the specified number of
-     *             bits could be read
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    public synchronized long readBits(int length) throws IOException {
-        if (length > Long.SIZE) {
-            throw new IllegalArgumentException("can't read more bits than the size of a long");
-        }
-        while (bufferLength < length) {
-            int octet = super.read();
-            if (octet == -1) {
-                throw new IllegalStateException("end of stream reached, cannot feed the buffer");
-            }
-            buffer = (buffer << 8) + octet;
-            bufferLength += 8;
-        }
-        return pollBitsFromBuffer(length);
-    }
-
-    /**
-     * Reads a bit from this stream.
-     *
-     * @return {@code true} for a 1 and {@code false} for a 0, or {@code null} if the
-     *         end of stream was reached
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    public Boolean readBitAsBoolean() throws IOException {
-        final int bit = readBit();
-        if (bit == 0) {
-            return false;
-        } else if (bit == 1) {
-            return true;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Reads the next {@link Byte#SIZE} bits from this stream as a {@code byte} from
-     * this stream.
-     *
-     * @return the read {@code byte}
-     * @throws IllegalStateException
-     *             if the end of stream is reached before enough bits could be read
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    public byte readByte() throws IOException {
-        return (byte) readBits(Byte.SIZE);
-    }
-
-    /**
-     * Reads the next {@link Character#SIZE} bits from this stream as a {@code char}
-     * from this stream.
-     *
-     * @return the read {@code char}
-     * @throws IllegalStateException
-     *             if the end of stream is reached before enough bits could be read
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    public char readChar() throws IOException {
-        return (char) readBits(Character.SIZE);
-    }
-
-    /**
-     * Reads the next {@link Integer#SIZE} bits from this stream as an {@code int}.
-     *
-     * @return the read {@code int}
-     * @throws IllegalStateException
-     *             if the end of stream is reached before enough bits could be read
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    public int readInt() throws IOException {
-        return (int) readBits(Integer.SIZE);
-    }
-
-    /**
-     * Reads the next {@link Long#SIZE} bits from this stream as a {@code long} from
-     * this stream.
-     *
-     * @return the read {@code long}
-     * @throws IllegalStateException
-     *             if the end of stream is reached before enough bits could be read
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    public long readLong() throws IOException {
-        return readBits(Long.SIZE);
     }
 
     /**
@@ -204,15 +193,16 @@ public class BitInputStream extends BufferedInputStream {
      *
      * @param length
      *            the number of bits to read
-     * @return a binary {@code String} representing the bits read. The left-most
-     *         characters are the first bits read from the stream.
+     * @return a {@code String} representing the bits read with the characters '0'
+     *         and '1'. The left-most characters are the first bits read from the
+     *         stream.
      * @throws IllegalStateException
      *             if the end of stream is reached before the specified number of
      *             bits could be read
      * @throws IOException
      *             if an I/O error occurs
      */
-    public String readString(int length) throws IOException {
+    public String readBitsAsString(int length) throws IOException {
         int remainingLength = length;
         final StringBuilder sb = new StringBuilder();
         while (remainingLength > 0) {
@@ -225,16 +215,148 @@ public class BitInputStream extends BufferedInputStream {
     }
 
     /**
-     * Reads a long value preceded by 6 bits indicating the number of bits used to
-     * write it. As an example, 000000 means that 1 bit follows, 111111 meaning that
-     * 64 bits follow.
+     * Reads the next bit from this stream as a {@code boolean}.
      *
-     * @return The read {@code Long}.
+     * @return {@code true} for a 1 and {@code false} for a 0
+     * @throws IllegalStateException
+     *             if the end of stream was reached before enough bits could be read
      * @throws IOException
-     *             If any I/O error occurs.
+     *             if an I/O error occurs
      */
-    public Long readLongWithLength() throws IOException {
-        final int length = (int) readBits(6) + 1;
-        return readBits(length);
+    public boolean readBoolean() throws IOException {
+        return readBits(1) % 2 == 1;
+    }
+
+    /**
+     * Reads the next bit from this stream as a {@link Boolean}.
+     *
+     * @return {@code true} for a 1 and {@code false} for a 0, or {@code null} if the
+     *         end of stream was reached
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    public Boolean readBooleanOrNull() throws IOException {
+        try {
+            return readBits(1) % 2 == 1;
+        } catch (IllegalStateException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Reads the next {@link Byte#SIZE} bits from this stream as a {@code byte}.
+     *
+     * @return the read {@code byte}
+     * @throws IllegalStateException
+     *             if the end of stream was reached before enough bits could be read
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    public byte readByte() throws IOException {
+        return (byte) readBits(Byte.SIZE);
+    }
+
+    /**
+     * Reads the next {@link Byte#SIZE} bits from this stream as a {@link Byte}.
+     *
+     * @return the read {@link Byte}, or {@code null} if the end of input was reached
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    public Byte readByteOrNull() throws IOException {
+        try {
+            return (byte) readBits(Byte.SIZE);
+        } catch (IllegalStateException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Reads the next {@link Character#SIZE} bits from this stream as a {@code char}.
+     *
+     * @return the read {@code char}
+     * @throws IllegalStateException
+     *             if the end of stream was reached before enough bits could be read
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    public char readChar() throws IOException {
+        return (char) readBits(Character.SIZE);
+    }
+
+    /**
+     * Reads the next {@link Character#SIZE} bits from this stream as a
+     * {@link Character}.
+     *
+     * @return the read {@link Character}, or {@code null} if the end of input was
+     *         reached
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    public Character readCharacter() throws IOException {
+        try {
+            return (char) readBits(Character.SIZE);
+        } catch (IllegalStateException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Reads the next {@link Integer#SIZE} bits from this stream as an {@code int}.
+     *
+     * @return the read {@code int}
+     * @throws IllegalStateException
+     *             if the end of stream was reached before enough bits could be read
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    public int readInt() throws IOException {
+        return (int) readBits(Integer.SIZE);
+    }
+
+    /**
+     * Reads the next {@link Integer#SIZE} bits from this stream as a {@link Integer}
+     * .
+     *
+     * @return the read {@link Integer}, or {@code null} if the end of input was
+     *         reached
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    public Integer readInteger() throws IOException {
+        try {
+            return (int) readBits(Integer.SIZE);
+        } catch (IllegalStateException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Reads the next {@link Long#SIZE} bits from this stream as a {@code long} from
+     * this stream.
+     *
+     * @return the read {@code long}
+     * @throws IllegalStateException
+     *             if the end of stream was reached before enough bits could be read
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    public long readLong() throws IOException {
+        return readBits(Long.SIZE);
+    }
+
+    /**
+     * Reads the next {@link Long#SIZE} bits from this stream as a {@link Long}.
+     *
+     * @return the read {@link Long}, or {@code null} if the end of input was reached
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    public Long readLongOrNull() throws IOException {
+        try {
+            return readBits(Long.SIZE);
+        } catch (IllegalStateException e) {
+            return null;
+        }
     }
 }

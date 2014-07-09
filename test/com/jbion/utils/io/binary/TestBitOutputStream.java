@@ -1,6 +1,6 @@
 package com.jbion.utils.io.binary;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -8,64 +8,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import org.junit.Test;
 
-public class TestBitStream {
+public class TestBitOutputStream {
 
-    private static final String TEMP_FILE_IN = System.getProperty("user.home") + "/temp_test_in";
     private static final String TEMP_FILE_OUT = System.getProperty("user.home") + "/temp_test_out";
-
-    @Test
-    public void testInputSream() throws IOException {
-        try (OutputStream out = new FileOutputStream(TEMP_FILE_IN)) {
-            out.write(0x00);
-            out.write(0xFF);
-            out.write(0x05);
-            out.write(0x0A);
-            out.write(0xF0);
-            out.write(0xAB);
-            out.write(0xCD);
-            out.write(0xEF);
-            out.write(0xFF);
-            out.write(0x01);
-            out.write(0x23);
-            out.write(0x45);
-            out.write(0x67);
-            out.write(0x89);
-            out.write(0xAB);
-            out.write(0xCD);
-            out.write(0xEF);
-            out.write(0x11);
-            out.write(0x21);
-            out.write(0x03);
-            out.write(0x3A);
-        }
-        try (BitInputStream in = new BitInputStream(new FileInputStream(TEMP_FILE_IN))) {
-            assertEquals((byte) 0x00, in.readByte());
-            assertEquals((byte) 0xFF, in.readByte());
-            assertEquals(0x0, in.readBits(4));
-            assertEquals(0x5, in.readBits(4));
-            assertEquals((char) 0x0AF0, in.readChar());
-            assertEquals(0xABCDEFFF, in.readInt());
-            assertEquals(0x0123456789ABCDEFL, in.readLong());
-            assertEquals(0x0, in.readBits(3));
-            assertEquals(0x11, in.readBits(5));
-            assertEquals(0x0, in.readBits(2));
-            assertEquals(0x21, in.readBits(6));
-            assertEquals(0x0, in.readBits(3));
-            assertEquals(0, in.readBit(), 0);
-            assertEquals(0, in.readBit(), 0);
-            assertEquals(0, in.readBit(), 0);
-            assertEquals(1, in.readBit(), 1);
-            assertEquals(1, in.readBit(), 1);
-            assertEquals("00111010", in.readString(8));
-            assertEquals(-1, in.readBit());
-        }
-        new File(TEMP_FILE_IN).delete();
-    }
-
+        
     @Test
     public void testOutputSream() throws IOException {
         try (BitOutputStream out = new BitOutputStream(new FileOutputStream(TEMP_FILE_OUT))) {

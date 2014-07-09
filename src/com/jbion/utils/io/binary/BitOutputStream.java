@@ -233,58 +233,14 @@ public class BitOutputStream extends BufferedOutputStream {
         if (!binaryString.matches("[01]*")) {
             throw new IllegalArgumentException("The input string '" + binaryString + "' must contain only 0s and 1s.");
         }
-        for (int i = 0; i < binaryString.length(); i++) {
-            if (binaryString.charAt(i) == '0') {
+        for (char c : binaryString.toCharArray()) {
+            if (c == '0') {
                 writeBit(0);
             } else {
+                assert c == '1' : "argument check failed";
                 writeBit(1);
             }
         }
-    }
-
-    /**
-     * Writes the given int value to this stream, preceded by 5 bits indicating the
-     * number of bits used to write it.
-     *
-     * @param value
-     *            The value to write.
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    public void writeIntegerWithLength(int value) throws IOException {
-        writeWithLength(value, 5);
-    }
-
-    /**
-     * Writes the given long value to this stream, preceded by 6 bits indicating the
-     * number of bits used to write it.
-     *
-     * @param value
-     *            the value to write
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    public void writeLongWithLength(long value) throws IOException {
-        writeWithLength(value, 6);
-    }
-
-    /**
-     * Writes the given {@code value} to this stream, preceded by
-     * {@code magnitudeLength} bits indicating the number of bits used to write
-     * {@code value}.
-     *
-     * @param value
-     *            the value to write to this stream
-     * @param magnitudeLength
-     *            the number of bits used to indicate the number of bits used for
-     *            {@code value} (beware of the number-of-bit-ception!)
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    private void writeWithLength(long value, int magnitudeLength) throws IOException {
-        final String binStr = Long.toBinaryString(value);
-        writeBits(binStr.length() - 1, magnitudeLength);
-        writeString(binStr);
     }
 
     /**

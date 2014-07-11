@@ -96,7 +96,8 @@ public class BitInputStream extends BufferedInputStream {
     }
 
     /**
-     * Retrieves and removes the first {@code length} bits from the buffer.
+     * Retrieves and removes the first {@code length} bits from the buffer. Ensure
+     * the buffer is long enough before calling this method.
      * 
      * @param length
      *            the number of bits to get
